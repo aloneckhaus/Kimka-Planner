@@ -1,0 +1,28 @@
+{
+  "name": "מערכת שעות – אלון & קים",
+  "short_name": "אלון&קים",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "dir": "rtl",
+  "lang": "he",
+  "background_color": "#F8FAFC",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
