@@ -1,382 +1,985 @@
 <!doctype html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#111827"/>
-<title>מערכת שעות – אלון & קים</title>
-<style>
-  :root{
-    --alon-bg:#FEF3C7; --alon-text:#92400E; --alon-border:#FCD34D; /* yellow */
-    --kim-bg:#E0E7FF;  --kim-text:#3730A3; --kim-border:#A5B4FC; /* indigo */
-    --fam-bg:#D1FAE5;  --fam-text:#065F46; --fam-border:#86EFAC;
-    --other-bg:#E5E7EB;--other-text:#111827;--other-border:#D1D5DB;
-    --grid-border:#E5E7EB;
-  }
-  *{box-sizing:border-box}
-  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; background:#F8FAFC; margin:0;}
-  .wrap{max-width:1180px; margin:auto; padding:16px}
-  h1{margin:0 0 8px; font-size:24px}
-  .toolbar{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px}
-  .legend{display:flex; gap:12px; flex-wrap:wrap; font-size:14px}
-  .badge{display:inline-flex; align-items:center; gap:6px}
-  .dot{width:12px; height:12px; border-radius:4px; display:inline-block}
-  .grid{display:grid; background:white; border:1px solid var(--grid-border); border-radius:14px; overflow:auto;
-        grid-template-columns: 120px repeat(7, minmax(160px,1fr));}
-  .cell{min-height:140px; border-top:1px solid var(--grid-border); padding:8px}
-  .head{position:sticky; top:0; background:#fff; z-index:4; border-bottom:1px solid var(--grid-border); text-align:center; font-weight:600; padding:10px}
-  .rowhead{position:sticky; left:0; background:#fff; z-index:2; border-left:1px solid var(--grid-border); font-weight:600; padding:10px}
-  .pill{border:1px solid; border-radius:12px; padding:6px 8px; margin-bottom:6px}
-  .pill .meta{opacity:.8; font-size:12px}
-  .alon{background:var(--alon-bg); color:var(--alon-text); border-color:var(--alon-border)}
-  .kim{background:var(--kim-bg); color:var(--kim-text); border-color:var(--kim-border)}
-  .fam{background:var(--fam-bg); color:var(--fam-text); border-color:var(--fam-border)}
-  .other{background:var(--other-bg); color:var(--other-text); border-color:var(--other-border)}
-  .add{width:100%; padding:6px 8px; border:1px dashed #cbd5e1; background:#f8fafc; border-radius:10px; cursor:pointer}
-  .footer{color:#64748b; font-size:12px; text-align:center; margin-top:8px}
-  dialog{border:none; border-radius:12px; padding:0}
-  .dlg{padding:16px 16px 10px}
-  input,select,textarea,button{font:inherit}
-  .field{display:grid; gap:6px; margin-bottom:8px}
-  .row{display:grid; grid-template-columns:1fr 1fr; gap:8px}
-  .btns{display:flex; justify-content:flex-end; gap:8px; margin-top:8px}
-  .btn{padding:8px 12px; border-radius:10px; border:1px solid #cbd5e1; background:white; cursor:pointer}
-  .btn.primary{background:#111827; color:white; border-color:#111827}
-  .btn.danger{background:#fee2e2; border-color:#fecaca}
-  .role{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:6px}
-  .role label{font-size:12px; color:#334155}
-  .seg{display:inline-flex; border:1px solid #CBD5E1; border-radius:999px; overflow:hidden}
-  .seg button{padding:4px 8px; border:none; background:#fff; cursor:pointer; font-size:12px}
-  .seg button.active.alon{background:var(--alon-bg); color:var(--alon-text);}
-  .seg button.active.kim{background:var(--kim-bg); color:var(--kim-text);}
-  .seg button.active.other{background:var(--other-bg); color:var(--other-text);}
-  .dual{display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:start; position:relative}
-  .col{min-height:80px}
-  .col + .col{border-right:1px dashed #d1d5db; padding-right:8px;}
-  .colHead{font-size:11px; color:#64748b; margin-bottom:4px; display:flex; align-items:center; gap:6px}
-  .dotTiny{width:8px; height:8px; border-radius:3px; display:inline-block}
-  .spanAll{grid-column:1 / span 2}
-  .banner{padding:10px 12px; background:#ecfeff; border:1px solid #a5f3fc; border-radius:10px; margin-bottom:10px; color:#155e75; font-size:14px}
-</style>
+  <meta charset="utf-8" />
+  <title>WEEKLY PLANNER FOR COUPLES</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root{
+      /* צבעי בעלים */
+      --alon-bg: rgba(253, 224, 71, 0.18);
+      --alon-text:#facc15;
+      --alon-border:#facc15;
+
+      --kim-bg: rgba(129, 140, 248, 0.18);
+      --kim-text:#818cf8;
+      --kim-border:#818cf8;
+
+      --fam-bg: rgba(45, 212, 191, 0.18);
+      --fam-text:#5eead4;
+      --fam-border:#5eead4;
+
+      --other-bg: rgba(148, 163, 184, 0.18);
+      --other-text:#e5e7eb;
+      --other-border:#94a3b8;
+
+      --grid-border:#1f2937;
+      --bg-main:#020617;
+      --bg-panel:#020617;
+      --bg-surface:#020617;
+      --bg-header:#020617;
+      --text-main:#e5e7eb;
+      --text-muted:#9ca3af;
+      --accent:#38bdf8;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      color:var(--text-main);
+      background:
+        radial-gradient(circle at top, #1f2937 0, #020617 55%, #000 100%);
+    }
+
+    .wrap{
+      max-width:1180px;
+      margin:0 auto;
+      padding:16px;
+    }
+
+    h1{
+      margin:0 0 4px;
+      font-size:24px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+    }
+
+    h1 span.mark{
+      padding:2px 10px;
+      border-radius:999px;
+      background:rgba(56,189,248,0.18);
+      border:1px solid rgba(56,189,248,0.6);
+      font-size:11px;
+      text-transform:none;
+      color:var(--accent);
+    }
+
+    .subtitle{
+      margin:0 0 12px;
+      color:var(--text-muted);
+      font-size:13px;
+    }
+
+    .topbar{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:10px;
+    }
+
+    .legend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      font-size:11px;
+      color:var(--text-muted);
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:3px;
+      background:#fff3;
+    }
+
+    .dot.alon{ background:var(--alon-border); }
+    .dot.kim { background:var(--kim-border); }
+    .dot.fam { background:var(--fam-border); }
+    .dot.other { background:var(--other-border); }
+
+    .admin-toggle{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.5);
+      background:rgba(15,23,42,0.8);
+      color:var(--text-muted);
+      font-size:11px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .admin-toggle:hover{
+      border-color:var(--accent);
+      color:var(--accent);
+    }
+
+    .admin-panel{
+      margin-bottom:8px;
+      padding:10px 12px;
+      border-radius:10px;
+      background:rgba(15,23,42,0.9);
+      border:1px solid rgba(30,64,175,0.7);
+      display:none;
+      font-size:12px;
+      color:var(--text-muted);
+    }
+
+    .admin-grid{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:6px;
+    }
+
+    .btn{
+      padding:6px 10px;
+      border-radius:8px;
+      border:1px solid rgba(148,163,184,0.6);
+      background:rgba(15,23,42,0.9);
+      color:var(--text-main);
+      font-size:12px;
+      cursor:pointer;
+    }
+    .btn:hover{ border-color:var(--accent); }
+
+    .btn.danger{
+      border-color:#f97373;
+      color:#fecaca;
+    }
+    .btn.danger:hover{
+      background:rgba(127,29,29,0.6);
+    }
+
+    /* ====== GRID ====== */
+    .grid{
+      display:grid;
+      grid-template-columns: 110px repeat(7, minmax(130px,1fr));
+      background:rgba(15,23,42,0.9);
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid #111827;
+      box-shadow:0 18px 45px rgba(0,0,0,0.55);
+    }
+
+    .head{
+      position:sticky;
+      top:0;
+      z-index:4;
+      background:linear-gradient(to bottom, #020617, #020617ee);
+      border-bottom:1px solid var(--grid-border);
+      text-align:center;
+      font-size:12px;
+      font-weight:600;
+      padding:10px 6px;
+      color:var(--text-muted);
+    }
+
+    .head span.day-label{
+      display:block;
+      color:var(--text-main);
+      font-size:13px;
+      margin-bottom:2px;
+    }
+
+    .head span.date-label{
+      font-size:11px;
+      opacity:0.6;
+    }
+
+    .rowhead{
+      position:sticky;
+      left:0;
+      z-index:3;
+      background:linear-gradient(to right,#020617,#020617e6);
+      border-inline-end:1px solid var(--grid-border);
+      border-bottom:1px solid var(--grid-border);
+      padding:12px 10px;
+      font-size:12px;
+      color:var(--text-muted);
+      display:flex;
+      align-items:center;
+    }
+
+    .cell{
+      min-height:120px;
+      border-bottom:1px solid var(--grid-border);
+      border-inline-start:1px solid var(--grid-border); /* קו אנכי בין ימים */
+      padding:6px;
+      background:rgba(2,6,23,0.97);
+    }
+
+    .cell-inner{
+      height:100%;
+      border-radius:10px;
+      padding:6px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .cell.muted .cell-inner{
+      opacity:0.7;
+    }
+
+    /* חלוקה אלון / קים */
+    .dual{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:4px;
+      align-items:flex-start;
+    }
+
+    .col{
+      min-height:60px;
+    }
+
+    .col-label{
+      font-size:10px;
+      color:var(--text-muted);
+      display:flex;
+      align-items:center;
+      gap:4px;
+      margin-bottom:2px;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+    }
+
+    .col-label .mini-dot{
+      width:7px;
+      height:7px;
+      border-radius:3px;
+      background:var(--accent);
+    }
+    .mini-dot.alon{ background:var(--alon-border); }
+    .mini-dot.kim{ background:var(--kim-border); }
+
+    .pill{
+      border-radius:10px;
+      padding:6px 7px;
+      margin-bottom:4px;
+      border:1px solid;
+      font-size:11px;
+      line-height:1.3;
+      cursor:pointer;
+      transition:background 0.15s ease, transform 0.05s ease;
+    }
+
+    .pill:hover{
+      background-color:rgba(148,163,184,0.16);
+      transform:translateY(-1px);
+    }
+
+    .pill .title{
+      font-weight:500;
+      display:block;
+    }
+
+    .pill .meta{
+      font-size:10px;
+      opacity:0.8;
+    }
+
+    .pill.alon{
+      background:var(--alon-bg);
+      border-color:var(--alon-border);
+      color:var(--alon-text);
+    }
+    .pill.kim{
+      background:var(--kim-bg);
+      border-color:var(--kim-border);
+      color:var(--kim-text);
+    }
+    .pill.fam{
+      background:var(--fam-bg);
+      border-color:var(--fam-border);
+      color:var(--fam-text);
+    }
+    .pill.other{
+      background:var(--other-bg);
+      border-color:var(--other-border);
+      color:var(--other-text);
+    }
+
+    .pill.spanAll{
+      grid-column:1 / span 2;
+    }
+
+    /* כפתור + בלבד */
+    .add{
+      width:100%;
+      padding:4px 0;
+      border-radius:8px;
+      border:1px dashed rgba(75,85,99,0.8);
+      background:transparent;
+      color:var(--text-muted);
+      font-size:14px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .add span.plus{
+      font-size:16px;
+      line-height:1;
+    }
+    .add:hover{
+      border-style:solid;
+      border-color:var(--accent);
+      color:var(--accent);
+      background:rgba(15,23,42,0.7);
+    }
+
+    /* מי לוקח/אוסף */
+    .role-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:6px;
+      margin-bottom:2px;
+      font-size:10px;
+      color:var(--text-muted);
+    }
+
+    .seg{
+      display:inline-flex;
+      border-radius:999px;
+      border:1px solid rgba(75,85,99,0.8);
+      overflow:hidden;
+      background:rgba(15,23,42,0.9);
+    }
+
+    .seg button{
+      padding:3px 8px;
+      border:none;
+      background:transparent;
+      color:var(--text-muted);
+      font-size:10px;
+      cursor:pointer;
+    }
+
+    .seg button.active{
+      color:#020617;
+      background:var(--accent);
+    }
+
+    .seg button.active.alon{ background:var(--alon-border); color:#0b1120; }
+    .seg button.active.kim { background:var(--kim-border); color:#020617; }
+    .seg button.active.other{ background:var(--other-border); color:#020617; }
+
+    /* FOOTER קטן */
+    .footer{
+      margin-top:10px;
+      font-size:11px;
+      color:var(--text-muted);
+      text-align:center;
+    }
+
+    dialog{
+      border:none;
+      border-radius:14px;
+      padding:0;
+      background:#020617;
+      color:var(--text-main);
+      box-shadow:0 18px 45px rgba(0,0,0,0.6);
+    }
+
+    .dlg{
+      padding:14px 14px 10px;
+      min-width:260px;
+    }
+
+    .dlg h3{
+      margin:0 0 10px;
+      font-size:15px;
+    }
+
+    .field{
+      display:grid;
+      gap:4px;
+      margin-bottom:8px;
+      font-size:12px;
+    }
+
+    .field label{
+      color:var(--text-muted);
+      font-size:11px;
+    }
+
+    input, select, textarea{
+      font:inherit;
+      padding:6px 8px;
+      border-radius:8px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:var(--text-main);
+    }
+    textarea{ resize:vertical; }
+
+    .row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:6px;
+    }
+
+    .btns{
+      margin-top:6px;
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+    }
+
+    @media (max-width:900px){
+      .grid{
+        grid-template-columns:80px repeat(7,minmax(120px,1fr));
+      }
+      .wrap{
+        padding-inline:8px;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>מערכת שעות – אלון & קים <span id="syncStatus" style="font-size:12px; font-weight:600; margin-inline-start:8px;"></span></h1>
-  <div id="banner" class="banner">
-    <b>סנכרון פעיל/מוכן</b> — ערכו את <code>config.js</code> עם פרטי Firebase שלכם. אפשר גם לשנות Household ID כאן:
-    <div class="row" style="margin-top:6px">
-      <div class="field"><label>Household ID</label><input id="household" value=""></div>
-      <div class="field"><label>&nbsp;</label><button id="applyHousehold" class="btn" type="button">עדכון</button></div>
+  <div class="wrap">
+    <h1>
+      WEEKLY PLANNER FOR COUPLES
+      <span class="mark">Kimka</span>
+    </h1>
+
+    <p class="subtitle">have a good week 💛</p>
+
+    <div class="topbar">
+      <div class="legend">
+        <span class="badge"><span class="dot alon"></span>אלון</span>
+        <span class="badge"><span class="dot kim"></span>קים</span>
+        <span class="badge"><span class="dot fam"></span>משפחה</span>
+        <span class="badge"><span class="dot other"></span>אחר / סבתא</span>
+      </div>
+      <button class="admin-toggle" id="adminToggle">
+        ⚙ Admin
+      </button>
     </div>
-    <small>טיפ: שתפו את אותו Household ID אצל שניכם כדי לראות את אותם נתונים.</small>
+
+    <div class="admin-panel" id="adminPanel">
+      פעולות ניהול (בשבילך בלבד, קים לא חייבת לגעת בזה):
+      <div class="admin-grid">
+        <button class="btn danger" id="resetWeek">איפוס שבוע</button>
+        <button class="btn" id="export">ייצוא JSON</button>
+        <label class="btn">
+          ייבוא JSON
+          <input id="importFile" type="file" accept="application/json" style="display:none">
+        </label>
+      </div>
+    </div>
+
+    <div id="grid" class="grid"></div>
+
+    <div class="footer">
+      בחירת לוקח/ת ואוסף/ת מסונכרנת בזמן אמת בין המכשירים (Firebase).<br>
+      עריכה מתבצעת על ידי לחיצה על המשבצות או האירועים.
+    </div>
   </div>
 
-  <div class="toolbar">
-    <div class="legend">
-      <span class="badge"><span class="dot" style="background:var(--alon-bg)"></span>אלון (צהוב)</span>
-      <span class="badge"><span class="dot" style="background:var(--kim-bg)"></span>קים (אינדיגו)</span>
-      <span class="badge"><span class="dot" style="background:var(--fam-bg)"></span>משפחה</span>
-      <span class="badge"><span class="dot" style="background:var(--other-bg)"></span>אחר/סבתא</span>
-    </div>
-    <button id="resetWeek" class="btn danger">איפוס שבוע</button>
-    <button id="export" class="btn">ייצוא JSON</button>
-    <input id="importFile" type="file" accept="application/json" class="btn" title="ייבוא JSON"/>
-  </div>
+  <!-- דיאלוג עריכה -->
+  <dialog id="dlg">
+    <form method="dialog" class="dlg">
+      <h3>עריכת פריט</h3>
+      <div class="field">
+        <label>כותרת</label>
+        <input id="title">
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>יום</label>
+          <select id="day"></select>
+        </div>
+        <div class="field">
+          <label>חלק ביום</label>
+          <select id="slot">
+            <option value="0">בוקר</option>
+            <option value="1">מהלך היום</option>
+            <option value="2">אחה״צ</option>
+            <option value="3">ערב</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>שייך ל</label>
+        <select id="person">
+          <option>אלון</option>
+          <option>קים</option>
+          <option>משפחה</option>
+          <option>אחר</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>הערות</label>
+        <textarea id="notes" rows="3"></textarea>
+      </div>
+      <div class="btns">
+        <button type="button" class="btn danger" id="deleteBtn">מחיקה</button>
+        <button type="button" class="btn" value="cancel" id="cancelBtn">ביטול</button>
+        <button type="button" class="btn" id="saveBtn">שמירה</button>
+      </div>
+    </form>
+  </dialog>
 
-  <div id="grid" class="grid"></div>
-  <div class="footer">בבוקר: מי <b>לוקח/ת לגן</b> (א׳–ה׳). אחה״צ: מי <b>אוסף/ת</b> (א׳–ה׳). הבחירה בלעדית. כאשר Firebase מוגדר, הכל מסונכרן בזמן אמת לשני הצדדים.</div>
-</div>
+  <!-- Firebase (compat) + config -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <!-- בקובץ זה אתה שומר את FIREBASE_CFG ו-HOUSEHOLD_ID כמו שכבר יש לך -->
+  <script src="config.js"></script>
 
-<dialog id="dlg">
-  <form method="dialog" class="dlg">
-    <h3 style="margin:0 0 10px">עריכת פריט</h3>
-    <div class="field"><label>כותרת</label><input id="title"></div>
-    <div class="row">
-      <div class="field"><label>יום</label><select id="day"></select></div>
-      <div class="field"><label>חלק ביום</label><select id="slot">
-        <option value="0">בוקר</option><option value="1">מהלך היום</option>
-        <option value="2">אחה״צ</option><option value="3">ערב</option></select></div>
-    </div>
-    <div class="field"><label>שייך ל</label><select id="person">
-      <option>אלון</option><option>קים</option><option>משפחה</option><option>אחר</option></select></div>
-    <div class="field"><label>הערות</label><textarea id="notes" rows="3"></textarea></div>
-    <div class="btns">
-      <button class="btn danger" id="deleteBtn" type="button">מחיקה</button>
-      <button class="btn" value="cancel">ביטול</button>
-      <button class="btn primary" id="saveBtn" type="button">שמירה</button>
-    </div>
-  </form>
-</dialog>
+  <script>
+    const DAYS = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
+    const SLOTS = ["בוקר","מהלך היום","אחה״צ","ערב"];
 
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-<script src="config.js"></script>
-<script>
-const DAYS = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
-const SLOTS = ["בוקר","מהלך היום","אחה״צ","ערב"];
-const LS_KEY = "weekly-planner-sync-local";
+    const LS_KEY = "weekly-planner-sync-local";
 
-let state = loadLocal() || { dropoff:Array(7).fill(null), pickup:Array(7).fill(null), events: [] };
-let events = state.events;
-
-let db = null, docRef = null, unsub = null, applyingRemote = false, saveTimer = null;
-let householdId = window.HOUSEHOLD_ID || "alon-kim";
-
-const grid = document.getElementById('grid');
-const dlg = document.getElementById('dlg');
-const titleEl = document.getElementById('title');
-const dayEl = document.getElementById('day');
-const slotEl = document.getElementById('slot');
-const personEl = document.getElementById('person');
-const notesEl = document.getElementById('notes');
-const saveBtn = document.getElementById('saveBtn');
-const deleteBtn = document.getElementById('deleteBtn');
-const exportBtn = document.getElementById('export');
-const importFile = document.getElementById('importFile');
-const resetWeekBtn = document.getElementById('resetWeek');
-const syncStatus = document.getElementById('syncStatus');
-const householdInput = document.getElementById('household');
-const applyHouseholdBtn = document.getElementById('applyHousehold');
-
-householdInput.value = householdId;
-applyHouseholdBtn.onclick = ()=>{
-  householdId = householdInput.value.trim() || "alon-kim";
-  localStorage.setItem("HOUSEHOLD_ID", householdId);
-  if(db){ initRealtime(); }
-  alert("עודכן Household ID ל: " + householdId);
-};
-
-function id(){ return Math.random().toString(36).slice(2,9); }
-function saveLocal(){ localStorage.setItem(LS_KEY, JSON.stringify({ ...state, events })); }
-function loadLocal(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)); }catch(e){ return null; }}
-
-function renderDaysSelect(){ dayEl.innerHTML = DAYS.map((d,i)=>`<option value="${i}">${d}</option>`).join(""); }
-renderDaysSelect();
-
-function pillClass(p){ return p==="אלון"?"alon":(p==="קים"?"kim":(p==="משפחה"?"fam":"other")); }
-
-function cleanupWeekendSpecials(){
-  events = events.filter(e => {
-    const isWeekend = e.day>=5;
-    const isSpecial = (e.slot===0 || e.slot===2) && (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"));
-    return !(isWeekend && isSpecial);
-  });
-  state.dropoff[5]=state.dropoff[6]=null;
-  state.pickup[5]=state.pickup[6]=null;
-  state.events = events;
-}
-
-function render(){
-  cleanupWeekendSpecials();
-  grid.innerHTML = "";
-  grid.append(cellHead(""));
-  for (let d=0; d<7; d++) grid.append(cellHead(DAYS[d]));
-  for (let s=0; s<4; s++){
-    grid.append(rowHead(SLOTS[s]));
-    for (let d=0; d<7; d++){
-      const items = events.filter(e=>e.day===d && e.slot===s);
-      grid.append(cell(d,s,items));
-    }
-  }
-}
-function cellHead(txt){ const div=document.createElement('div'); div.className="head"; div.textContent=txt; return div; }
-function rowHead(txt){ const div=document.createElement('div'); div.className="rowhead"; div.textContent=txt; return div; }
-
-function makeExclusiveSeg(current, onChange){
-  const seg = document.createElement('div'); seg.className="seg";
-  const options = ["אלון","קים","סבתא"];
-  const btns = options.map(name=>{
-    const b=document.createElement('button'); b.type="button"; b.textContent=name; seg.append(b); return b;
-  });
-  function paint(val){
-    btns.forEach((b,i)=>{
-      const who = options[i];
-      b.className = (val===who) ? `active ${who==='אלון'?'alon':(who==='קים'?'kim':'other')}` : "";
-    });
-  }
-  btns.forEach((b,i)=>{
-    b.onclick = ()=>{
-      const who = options[i];
-      const next = (current===who) ? null : who;
-      current = next; paint(current); onChange(current);
+    let state = loadLocal() || {
+      dropoff: Array(7).fill(null),
+      pickup: Array(7).fill(null),
+      events: []
     };
-  });
-  paint(current);
-  return seg;
-}
+    let events = state.events || [];
 
-function upsertSpecialEvent(day, slot, label, who){
-  events = events.filter(e => !(e.day===day && e.slot===slot && (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"))));
-  if (who){
-    const person = (who==='סבתא') ? 'אחר' : who;
-    const title = label;
-    events.push({ id:id(), day, slot, title, person });
-  }
-  state.events = events; scheduleSave();
-}
+    let saveTimer = null;
+    let applyingRemote = false;
 
-function cell(day, slot, items){
-  const div=document.createElement('div'); div.className="cell";
-  if ((slot===0 || slot===2) && day < 5){
-    const role = document.createElement('div'); role.className="role";
-    const label = document.createElement('label');
-    label.textContent = slot===0 ? "לוקח/ת לגן:" : "אוסף/ת:";
-    const cur = slot===0 ? state.dropoff[day] : state.pickup[day];
-    const seg = makeExclusiveSeg(cur, (val)=>{
-      if (slot===0) { state.dropoff[day]=val; upsertSpecialEvent(day,0,"לוקח/ת לגן", val); }
-      else { state.pickup[day]=val; upsertSpecialEvent(day,2,"אוסף/ת", val); }
+    let db = null;
+    let docRef = null;
+    let unsub = null;
+    let householdId = window.HOUSEHOLD_ID || "alon-kim";
+
+    const grid = document.getElementById('grid');
+    const dlg = document.getElementById('dlg');
+    const titleEl = document.getElementById('title');
+    const dayEl = document.getElementById('day');
+    const slotEl = document.getElementById('slot');
+    const personEl = document.getElementById('person');
+    const notesEl = document.getElementById('notes');
+    const saveBtn = document.getElementById('saveBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const exportBtn = document.getElementById('export');
+    const importFile = document.getElementById('importFile');
+    const resetWeekBtn = document.getElementById('resetWeek');
+    const adminToggle = document.getElementById('adminToggle');
+    const adminPanel = document.getElementById('adminPanel');
+
+    adminToggle.addEventListener('click', () => {
+      const open = adminPanel.style.display === 'block';
+      adminPanel.style.display = open ? 'none' : 'block';
+    });
+
+    function loadLocal(){
+      try{
+        const raw = localStorage.getItem(LS_KEY);
+        return raw ? JSON.parse(raw) : null;
+      }catch(e){ return null; }
+    }
+    function saveLocal(){
+      localStorage.setItem(LS_KEY, JSON.stringify({ ...state, events }));
+    }
+
+    function pillClass(person){
+      switch(person){
+        case "אלון": return "alon";
+        case "קים": return "kim";
+        case "משפחה": return "fam";
+        default: return "other";
+      }
+    }
+
+    function cleanupWeekendSpecials(){
+      events = events.filter(e => {
+        const isWeekend = e.day >= 5;
+        const isSpecial = (e.slot === 0 || e.slot === 2) &&
+                         (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"));
+        return !(isWeekend && isSpecial);
+      });
+      state.dropoff[5] = state.dropoff[6] = null;
+      state.pickup[5]  = state.pickup[6]  = null;
+      state.events = events;
+    }
+
+    function renderDaysSelect(){
+      dayEl.innerHTML = DAYS.map((d,i)=>`<option value="${i}">${d}</option>`).join("");
+    }
+    renderDaysSelect();
+
+    function render(){
+      cleanupWeekendSpecials();
+      grid.innerHTML = "";
+
+      // שורת כותרות
+      grid.append(headCell(""));
+      for(let d=0; d<7; d++){
+        const h = document.createElement('div');
+        h.className = "head";
+        const dayName = DAYS[d];
+        h.innerHTML = `<span class="day-label">${dayName}</span>`;
+        grid.append(h);
+      }
+
+      // שורות זמן
+      for(let s=0; s<SLOTS.length; s++){
+        grid.append(rowHead(SLOTS[s]));
+        for(let d=0; d<7; d++){
+          const items = events.filter(e => e.day === d && e.slot === s);
+          grid.append(cell(d,s,items));
+        }
+      }
+    }
+
+    function headCell(txt){
+      const div = document.createElement('div');
+      div.className = "head";
+      div.textContent = txt || "";
+      return div;
+    }
+
+    function rowHead(txt){
+      const div = document.createElement('div');
+      div.className = "rowhead";
+      div.textContent = txt;
+      return div;
+    }
+
+    function makeExclusiveSeg(current, onChange){
+      const seg = document.createElement('div');
+      seg.className = "seg";
+      const options = ["אלון","קים","סבתא"];
+
+      const btns = options.map(name => {
+        const b = document.createElement('button');
+        b.type = "button";
+        b.textContent = name;
+        seg.appendChild(b);
+        return b;
+      });
+
+      function paint(val){
+        btns.forEach((b,i)=>{
+          const who = options[i];
+          b.className = "";
+          if(val === who){
+            let cls = "active ";
+            cls += who === "אלון" ? "alon" : (who === "קים" ? "kim" : "other");
+            b.className = cls;
+          }
+        });
+      }
+
+      btns.forEach((b,i)=>{
+        b.addEventListener('click', ()=>{
+          const who = options[i];
+          const next = (current === who) ? null : who;
+          current = next;
+          paint(current);
+          onChange(current);
+        });
+      });
+
+      paint(current);
+      return seg;
+    }
+
+    function upsertSpecialEvent(day, slot, label, who){
+      events = events.filter(e => !(e.day === day && e.slot === slot &&
+             (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"))));
+      if(who){
+        const person = (who === "סבתא") ? "אחר" : who;
+        events.push({
+          id: id(),
+          day,
+          slot,
+          title: label,
+          person,
+          notes:""
+        });
+      }
+      state.events = events;
+      scheduleSave();
+    }
+
+    function cell(day, slot, items){
+      const outer = document.createElement('div');
+      outer.className = "cell";
+      const inner = document.createElement('div');
+      inner.className = "cell-inner";
+      outer.appendChild(inner);
+
+      if((slot === 0 || slot === 2) && day < 5){
+        const role = document.createElement('div');
+        role.className = "role-row";
+        const label = document.createElement('span');
+        label.textContent = (slot === 0) ? "לוקח/ת לגן:" : "אוסף/ת:";
+        const seg = makeExclusiveSeg(
+          slot === 0 ? state.dropoff[day] : state.pickup[day],
+          (val)=>{
+            if(slot === 0){
+              state.dropoff[day] = val;
+              upsertSpecialEvent(day,0,"לוקח/ת לגן", val);
+            }else{
+              state.pickup[day] = val;
+              upsertSpecialEvent(day,2,"אוסף/ת", val);
+            }
+            render();
+          }
+        );
+        role.append(label, seg);
+        inner.appendChild(role);
+      }
+
+      const dual = document.createElement('div');
+      dual.className = "dual";
+
+      const colA = document.createElement('div');
+      colA.className = "col";
+      const colK = document.createElement('div');
+      colK.className = "col";
+
+      colA.appendChild(colLabel("אלון","alon"));
+      colK.appendChild(colLabel("קים","kim"));
+
+      // shared (משפחה / אחר) – spanning
+      items.filter(i => i.person === "משפחה" || i.person === "אחר")
+           .forEach(item => {
+        const p = pillNode(item);
+        p.classList.add("spanAll");
+        dual.appendChild(p);
+      });
+
+      items.filter(i => i.person === "אלון").forEach(item=>{
+        colA.appendChild(pillNode(item));
+      });
+      items.filter(i => i.person === "קים").forEach(item=>{
+        colK.appendChild(pillNode(item));
+      });
+
+      colA.appendChild(addBtn(()=> openEditor({
+        id:null, day, slot, title:"", person:"אלון", notes:""
+      })));
+      colK.appendChild(addBtn(()=> openEditor({
+        id:null, day, slot, title:"", person:"קים", notes:""
+      })));
+
+      dual.append(colA,colK);
+      inner.appendChild(dual);
+
+      return outer;
+    }
+
+    function colLabel(name, cls){
+      const d = document.createElement('div');
+      d.className = "col-label";
+      const dot = document.createElement('span');
+      dot.className = "mini-dot " + cls;
+      d.append(dot, document.createTextNode(name));
+      return d;
+    }
+
+    function pillNode(item){
+      const p = document.createElement('div');
+      p.className = "pill " + pillClass(item.person);
+      p.innerHTML =
+        `<span class="title">${item.title}</span>` +
+        `<span class="meta">${item.person}${item.notes ? " • " + item.notes : ""}</span>`;
+      p.addEventListener('click', ()=> openEditor(item));
+      return p;
+    }
+
+    function addBtn(onClick){
+      const btn = document.createElement('button');
+      btn.type = "button";
+      btn.className = "add";
+      btn.innerHTML = `<span class="plus">+</span>`;
+      btn.addEventListener('click', onClick);
+      return btn;
+    }
+
+    // ===== דיאלוג =====
+    let editingId = null;
+
+    function openEditor(item){
+      editingId = item.id;
+      titleEl.value = item.title || "";
+      dayEl.value = item.day;
+      slotEl.value = item.slot;
+      personEl.value = item.person || "אלון";
+      notesEl.value = item.notes || "";
+      deleteBtn.style.display = editingId ? "inline-block" : "none";
+      dlg.showModal();
+    }
+
+    saveBtn.addEventListener('click', ()=>{
+      const obj = {
+        id: editingId || id(),
+        title: titleEl.value.trim(),
+        day: Number(dayEl.value),
+        slot: Number(slotEl.value),
+        person: personEl.value,
+        notes: notesEl.value.trim()
+      };
+      if(!obj.title){
+        dlg.close();
+        return;
+      }
+      const idx = events.findIndex(e => e.id === obj.id);
+      if(idx >= 0) events[idx] = obj; else events.push(obj);
+      state.events = events;
+      scheduleSave();
+      render();
+      dlg.close();
+    });
+
+    deleteBtn.addEventListener('click', ()=>{
+      if(!editingId) return;
+      events = events.filter(e => e.id !== editingId);
+      state.events = events;
+      scheduleSave();
+      render();
+      dlg.close();
+    });
+
+    cancelBtn.addEventListener('click', ()=>{
+      dlg.close();
+    });
+
+    // ===== ייצוא / ייבוא / איפוס =====
+    exportBtn.addEventListener('click', ()=>{
+      const blob = new Blob(
+        [JSON.stringify({ ...state, events }, null, 2)],
+        { type: "application/json" }
+      );
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "weekly-plan.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    importFile.addEventListener('change', e=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        try{
+          const data = JSON.parse(reader.result);
+          state = data;
+          events = data.events || [];
+          saveLocal();
+          scheduleSave();
+          render();
+        }catch(err){
+          alert("קובץ לא תקין");
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    resetWeekBtn.addEventListener('click', ()=>{
+      if(!confirm("לאפס את כל השבוע?")) return;
+      state.dropoff = Array(7).fill(null);
+      state.pickup  = Array(7).fill(null);
+      events = [];
+      state.events = events;
+      scheduleSave();
       render();
     });
-    role.append(label, seg); div.append(role);
-  }
 
-  const dual = document.createElement('div'); dual.className="dual";
-  const colA = document.createElement('div'); colA.className="col";
-  const colK = document.createElement('div'); colK.className="col";
-  colA.append(colHead("אלון","var(--alon-bg)"));
-  colK.append(colHead("קים","var(--kim-bg)"));
+    // ===== UTIL =====
+    function id(){ return Math.random().toString(36).slice(2,9); }
 
-  items.filter(i=>i.person==="משפחה" || i.person==="אחר").forEach(item=>{
-    const p = pillNode(item);
-    p.classList.add("spanAll");
-    dual.append(p);
-  });
-  items.filter(i=>i.person==="אלון").forEach(item=> colA.append(pillNode(item)));
-  items.filter(i=>i.person==="קים").forEach(item=> colK.append(pillNode(item)));
-
-  colA.append(addBtn(()=> openEditor({id:null, day, slot, title:"", person:"אלון", notes:""})));
-  colK.append(addBtn(()=> openEditor({id:null, day, slot, title:"", person:"קים", notes:""})));
-
-  dual.append(colA,colK);
-  div.append(dual);
-  return div;
-}
-
-function colHead(name, colorVar){
-  const h = document.createElement('div'); h.className="colHead";
-  const d = document.createElement('span'); d.className="dotTiny"; d.style.background = `var(${colorVar})`;
-  h.append(d, document.createTextNode(name));
-  return h;
-}
-
-function pillNode(item){
-  const p=document.createElement('div'); p.className=`pill ${pillClass(item.person)}`;
-  p.innerHTML = `<div><strong>${item.title}</strong> <span class="meta">• ${item.person}</span></div>` +
-                (item.notes? `<div class="meta">${item.notes}</div>` : "");
-  p.addEventListener('click', ()=> openEditor(item));
-  return p;
-}
-
-function addBtn(onClick){
-  const add=document.createElement('button'); add.className="add"; add.textContent="+ הוספה";
-  add.addEventListener('click', onClick);
-  return add;
-}
-
-let editingId = null;
-function openEditor(item){
-  editingId = item.id;
-  titleEl.value = item.title || "";
-  dayEl.value = item.day;
-  slotEl.value = item.slot;
-  personEl.value = item.person || "אלון";
-  notesEl.value = item.notes || "";
-  deleteBtn.style.display = editingId ? "inline-block" : "none";
-  dlg.showModal();
-}
-
-saveBtn.addEventListener('click', ()=>{
-  const obj = { id: editingId || id(), title: titleEl.value.trim(),
-    day: Number(dayEl.value), slot: Number(slotEl.value), person: personEl.value, notes: notesEl.value.trim() };
-  if(!obj.title){ dlg.close(); return; }
-  const idx = events.findIndex(e=>e.id===obj.id);
-  if(idx>=0) events[idx] = obj; else events.push(obj);
-  state.events = events; scheduleSave(); render(); dlg.close();
-});
-deleteBtn.addEventListener('click', ()=>{
-  if(!editingId){ return; }
-  events = events.filter(e=>e.id!==editingId);
-  state.events = events; scheduleSave(); render(); dlg.close();
-});
-exportBtn.addEventListener('click', ()=>{
-  const blob = new Blob([JSON.stringify({ ...state, events },null,2)],{type:"application/json"});
-  const url = URL.createObjectURL(blob); const a = document.createElement('a');
-  a.href = url; a.download = "weekly-plan.json"; a.click(); URL.revokeObjectURL(url);
-});
-importFile.addEventListener('change', (e)=>{
-  const file = e.target.files[0]; if(!file) return;
-  const r = new FileReader();
-  r.onload = ()=>{ try{ const data = JSON.parse(r.result); state = data; events = data.events || []; scheduleSave(); render(); } catch(err){ alert("קובץ לא תקין"); } };
-  r.readAsText(file);
-});
-resetWeekBtn.addEventListener('click', ()=>{
-  if(!confirm("לאפס את השבוע? כל המשימות, לוקח/ת ואוסף/ת יימחקו.")) return;
-  state.dropoff = Array(7).fill(null); state.pickup  = Array(7).fill(null);
-  events = []; state.events = events; scheduleSave(); render();
-});
-
-// Firebase init & realtime sync
-function initFirebase(){
-  try{
-    const cfg = window.FIREBASE_CFG;
-    if(!cfg || !cfg.apiKey){ syncStatus.textContent = "ללא Firebase (מקומי)"; return; }
-    const app = firebase.initializeApp(cfg);
-    const auth = firebase.auth();
-    window._db = firebase.firestore();
-    syncStatus.textContent = "מתחבר…";
-    auth.signInAnonymously().then(()=>{
-      syncStatus.textContent = "מחובר";
-      initRealtime();
-    }).catch(e=>{ syncStatus.textContent = "שגיאה בחיבור"; console.error(e); });
-  }catch(e){
-    syncStatus.textContent = "שגיאה בהגדרה"; console.error(e);
-  }
-}
-
-function initRealtime(){
-  if(!window._db) return;
-  if(window._unsub) window._unsub();
-  const dref = window._db.collection("plans").doc(householdId);
-  window._docRef = dref;
-  dref.get().then(snap=>{
-    if(!snap.exists){
-      dref.set({ ...state, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+    // ===== FIREBASE =====
+    function initFirebase(){
+      try{
+        const cfg = window.FIREBASE_CFG;
+        if(!cfg || !cfg.apiKey){
+          render();
+          return;
+        }
+        const app = firebase.initializeApp(cfg);
+        db = firebase.firestore();
+        const auth = firebase.auth();
+        auth.signInAnonymously()
+          .then(()=> initRealtime())
+          .catch(err => {
+            console.error("auth error", err);
+            render();
+          });
+      }catch(e){
+        console.error("firebase init error", e);
+        render();
+      }
     }
-  });
-  window._unsub = dref.onSnapshot(doc=>{
-    if(!doc.exists) return;
-    applyingRemote = true;
-    const data = doc.data();
-    state = { dropoff: data.dropoff || Array(7).fill(null),
-              pickup: data.pickup || Array(7).fill(null),
-              events: data.events || [] };
-    events = state.events; saveLocal(); render(); applyingRemote = false;
-    syncStatus.textContent = "מסונכרן ✔ ("+householdId+")";
-  });
-}
 
-function scheduleSave(){
-  saveLocal();
-  if(!window._db || !window._docRef || applyingRemote) return;
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>{
-    window._docRef.set({ ...state, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge:true });
-    syncStatus.textContent = "שומר…";
-  }, 250);
-}
+    function initRealtime(){
+      if(!db) return render();
+      if(unsub) unsub();
 
-// Initial render
-render();
-initFirebase();
+      docRef = db.collection("plans").doc(householdId);
+      docRef.get().then(snap=>{
+        if(!snap.exists){
+          docRef.set({
+            dropoff: state.dropoff,
+            pickup: state.pickup,
+            events: events,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+      });
 
-// PWA install
-if("serviceWorker" in navigator){
-  window.addEventListener("load", ()=>{
-    navigator.serviceWorker.register("./service-worker.js");
-  });
-}
-</script>
+      unsub = docRef.onSnapshot(doc=>{
+        if(!doc.exists) return;
+        applyingRemote = true;
+        const data = doc.data();
+        state = {
+          dropoff: data.dropoff || Array(7).fill(null),
+          pickup: data.pickup || Array(7).fill(null),
+          events: data.events || []
+        };
+        events = state.events;
+        saveLocal();
+        render();
+        applyingRemote = false;
+      });
+    }
+
+    function scheduleSave(){
+      saveLocal();
+      if(!db || !docRef || applyingRemote) return;
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(()=>{
+        docRef.set({
+          dropoff: state.dropoff,
+          pickup: state.pickup,
+          events: state.events || [],
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge:true });
+      }, 250);
+    }
+
+    // התחלה
+    render();
+    initFirebase();
+  </script>
 </body>
 </html>
