@@ -7,31 +7,30 @@
 
   <style>
     :root{
-      /* צבעי בעלים */
+      /* צבעי בעלים / משפחה */
       --alon-bg: rgba(253, 224, 71, 0.18);
-      --alon-text:#facc15;
-      --alon-border:#facc15;
+      --alon-text:#92400E;
+      --alon-border:#FACC15;
 
       --kim-bg: rgba(129, 140, 248, 0.18);
-      --kim-text:#818cf8;
-      --kim-border:#818cf8;
+      --kim-text:#3730A3;
+      --kim-border:#818CF8;
 
       --fam-bg: rgba(45, 212, 191, 0.18);
-      --fam-text:#5eead4;
-      --fam-border:#5eead4;
+      --fam-text:#065F46;
+      --fam-border:#5EEAD4;
 
       --other-bg: rgba(148, 163, 184, 0.18);
-      --other-text:#e5e7eb;
-      --other-border:#94a3b8;
+      --other-text:#111827;
+      --other-border:#94A3B8;
 
-      --grid-border:#1f2937;
-      --bg-main:#020617;
-      --bg-panel:#020617;
-      --bg-surface:#020617;
-      --bg-header:#020617;
-      --text-main:#e5e7eb;
-      --text-muted:#9ca3af;
-      --accent:#38bdf8;
+      --bg-page:#F3F4F6;
+      --bg-card:#FFFFFF;
+      --border-grid:#E5E7EB;
+      --border-strong:#D1D5DB;
+      --text-main:#111827;
+      --text-muted:#6B7280;
+      --accent:#1D4ED8;
     }
 
     *{ box-sizing:border-box; }
@@ -39,9 +38,8 @@
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      background:var(--bg-page);
       color:var(--text-main);
-      background:
-        radial-gradient(circle at top, #1f2937 0, #020617 55%, #000 100%);
     }
 
     .wrap{
@@ -53,20 +51,10 @@
     h1{
       margin:0 0 4px;
       font-size:24px;
+      font-weight:600;
       display:flex;
       align-items:center;
       gap:8px;
-      letter-spacing:0.04em;
-      text-transform:uppercase;
-    }
-
-    h1 span.mark{
-      padding:2px 10px;
-      border-radius:999px;
-      background:rgba(56,189,248,0.18);
-      border:1px solid rgba(56,189,248,0.6);
-      font-size:11px;
-      text-transform:none;
       color:var(--accent);
     }
 
@@ -78,312 +66,242 @@
 
     .topbar{
       display:flex;
-      flex-wrap:wrap;
-      align-items:center;
       justify-content:space-between;
+      align-items:center;
       gap:8px;
-      margin-bottom:10px;
+      margin-bottom:12px;
+      flex-wrap:wrap;
     }
 
     .legend{
       display:flex;
+      gap:12px;
       flex-wrap:wrap;
-      gap:10px;
-      font-size:11px;
+      font-size:12px;
       color:var(--text-muted);
     }
 
     .badge{
       display:inline-flex;
       align-items:center;
-      gap:6px;
+      gap:5px;
     }
 
     .dot{
-      width:10px;
-      height:10px;
-      border-radius:3px;
-      background:#fff3;
-    }
-
-    .dot.alon{ background:var(--alon-border); }
-    .dot.kim { background:var(--kim-border); }
-    .dot.fam { background:var(--fam-border); }
-    .dot.other { background:var(--other-border); }
-
-    .admin-toggle{
-      padding:6px 10px;
+      width:11px;
+      height:11px;
       border-radius:999px;
-      border:1px solid rgba(148,163,184,0.5);
-      background:rgba(15,23,42,0.8);
-      color:var(--text-muted);
-      font-size:11px;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      gap:6px;
-    }
-    .admin-toggle:hover{
-      border-color:var(--accent);
-      color:var(--accent);
-    }
-
-    .admin-panel{
-      margin-bottom:8px;
-      padding:10px 12px;
-      border-radius:10px;
-      background:rgba(15,23,42,0.9);
-      border:1px solid rgba(30,64,175,0.7);
-      display:none;
-      font-size:12px;
-      color:var(--text-muted);
-    }
-
-    .admin-grid{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:6px;
+      display:inline-block;
     }
 
     .btn{
       padding:6px 10px;
-      border-radius:8px;
-      border:1px solid rgba(148,163,184,0.6);
-      background:rgba(15,23,42,0.9);
-      color:var(--text-main);
-      font-size:12px;
+      border-radius:999px;
+      border:1px solid var(--border-strong);
+      background:#FFFFFF;
       cursor:pointer;
+      font-size:12px;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
     }
-    .btn:hover{ border-color:var(--accent); }
-
+    .btn:active{
+      transform:translateY(1px);
+    }
     .btn.danger{
-      border-color:#f97373;
-      color:#fecaca;
-    }
-    .btn.danger:hover{
-      background:rgba(127,29,29,0.6);
+      border-color:#FCA5A5;
+      color:#B91C1C;
+      background:#FEF2F2;
     }
 
-    /* ====== GRID ====== */
+    .status{
+      font-size:11px;
+      color:var(--text-muted);
+    }
+
+    /* אזור הגריד + גלילה נוחה בנייד */
+    .grid-scroll{
+      margin-top:8px;
+      background:var(--bg-card);
+      border-radius:16px;
+      box-shadow:0 10px 25px rgba(15,23,42,0.08);
+      border:1px solid var(--border-grid);
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+
     .grid{
+      min-width:900px;
       display:grid;
-      grid-template-columns: 110px repeat(7, minmax(130px,1fr));
-      background:rgba(15,23,42,0.9);
-      border-radius:18px;
-      overflow:hidden;
-      border:1px solid #111827;
-      box-shadow:0 18px 45px rgba(0,0,0,0.55);
+      grid-template-columns: 120px repeat(7, minmax(120px,1fr));
+      border-collapse:collapse;
     }
 
     .head{
       position:sticky;
       top:0;
-      z-index:4;
-      background:linear-gradient(to bottom, #020617, #020617ee);
-      border-bottom:1px solid var(--grid-border);
-      text-align:center;
-      font-size:12px;
-      font-weight:600;
+      z-index:3;
+      background:#F9FAFB;
       padding:10px 6px;
-      color:var(--text-muted);
-    }
-
-    .head span.day-label{
-      display:block;
-      color:var(--text-main);
+      text-align:center;
+      font-weight:600;
       font-size:13px;
-      margin-bottom:2px;
+      border-bottom:1px solid var(--border-grid);
+      border-left:1px solid var(--border-grid);
     }
 
-    .head span.date-label{
-      font-size:11px;
-      opacity:0.6;
+    .head:first-child{
+      border-top-right-radius:16px;
+    }
+    .head:last-child{
+      border-top-left-radius:16px;
     }
 
     .rowhead{
       position:sticky;
       left:0;
-      z-index:3;
-      background:linear-gradient(to right,#020617,#020617e6);
-      border-inline-end:1px solid var(--grid-border);
-      border-bottom:1px solid var(--grid-border);
-      padding:12px 10px;
+      z-index:2;
+      background:#F9FAFB;
+      padding:10px 6px;
+      font-weight:500;
       font-size:12px;
-      color:var(--text-muted);
-      display:flex;
-      align-items:center;
+      border-bottom:1px solid var(--border-grid);
+      border-left:1px solid var(--border-grid);
     }
 
     .cell{
       min-height:120px;
-      border-bottom:1px solid var(--grid-border);
-      border-inline-start:1px solid var(--grid-border); /* קו אנכי בין ימים */
       padding:6px;
-      background:rgba(2,6,23,0.97);
+      border-left:1px solid var(--border-grid);
+      border-bottom:1px solid var(--border-grid);
+      font-size:12px;
     }
 
     .cell-inner{
-      height:100%;
-      border-radius:10px;
-      padding:6px;
       display:flex;
       flex-direction:column;
       gap:4px;
+      height:100%;
     }
 
-    .cell.muted .cell-inner{
-      opacity:0.7;
-    }
-
-    /* חלוקה אלון / קים */
-    .dual{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:4px;
-      align-items:flex-start;
-    }
-
-    .col{
-      min-height:60px;
-    }
-
-    .col-label{
-      font-size:10px;
-      color:var(--text-muted);
+    /* בחירת לוקח/ת / אוסף/ת */
+    .role{
       display:flex;
       align-items:center;
-      gap:4px;
-      margin-bottom:2px;
-      text-transform:uppercase;
-      letter-spacing:0.06em;
-    }
-
-    .col-label .mini-dot{
-      width:7px;
-      height:7px;
-      border-radius:3px;
-      background:var(--accent);
-    }
-    .mini-dot.alon{ background:var(--alon-border); }
-    .mini-dot.kim{ background:var(--kim-border); }
-
-    .pill{
-      border-radius:10px;
-      padding:6px 7px;
-      margin-bottom:4px;
-      border:1px solid;
-      font-size:11px;
-      line-height:1.3;
-      cursor:pointer;
-      transition:background 0.15s ease, transform 0.05s ease;
-    }
-
-    .pill:hover{
-      background-color:rgba(148,163,184,0.16);
-      transform:translateY(-1px);
-    }
-
-    .pill .title{
-      font-weight:500;
-      display:block;
-    }
-
-    .pill .meta{
-      font-size:10px;
-      opacity:0.8;
-    }
-
-    .pill.alon{
-      background:var(--alon-bg);
-      border-color:var(--alon-border);
-      color:var(--alon-text);
-    }
-    .pill.kim{
-      background:var(--kim-bg);
-      border-color:var(--kim-border);
-      color:var(--kim-text);
-    }
-    .pill.fam{
-      background:var(--fam-bg);
-      border-color:var(--fam-border);
-      color:var(--fam-text);
-    }
-    .pill.other{
-      background:var(--other-bg);
-      border-color:var(--other-border);
-      color:var(--other-text);
-    }
-
-    .pill.spanAll{
-      grid-column:1 / span 2;
-    }
-
-    /* כפתור + בלבד */
-    .add{
-      width:100%;
-      padding:4px 0;
-      border-radius:8px;
-      border:1px dashed rgba(75,85,99,0.8);
-      background:transparent;
-      color:var(--text-muted);
-      font-size:14px;
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .add span.plus{
-      font-size:16px;
-      line-height:1;
-    }
-    .add:hover{
-      border-style:solid;
-      border-color:var(--accent);
-      color:var(--accent);
-      background:rgba(15,23,42,0.7);
-    }
-
-    /* מי לוקח/אוסף */
-    .role-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
       gap:6px;
-      margin-bottom:2px;
-      font-size:10px;
+      flex-wrap:wrap;
+      margin-bottom:3px;
+      font-size:11px;
       color:var(--text-muted);
     }
 
     .seg{
       display:inline-flex;
       border-radius:999px;
-      border:1px solid rgba(75,85,99,0.8);
+      border:1px solid #CBD5E1;
       overflow:hidden;
-      background:rgba(15,23,42,0.9);
+      background:#F9FAFB;
     }
 
     .seg button{
-      padding:3px 8px;
       border:none;
       background:transparent;
-      color:var(--text-muted);
-      font-size:10px;
+      padding:3px 7px;
       cursor:pointer;
+      font-size:11px;
+      color:var(--text-muted);
+      white-space:nowrap;
     }
 
-    .seg button.active{
-      color:#020617;
-      background:var(--accent);
+    .seg button.active-alon{
+      background:var(--alon-bg);
+      color:var(--alon-text);
+    }
+    .seg button.active-kim{
+      background:var(--kim-bg);
+      color:var(--kim-text);
+    }
+    .seg button.active-other{
+      background:var(--other-bg);
+      color:var(--other-text);
     }
 
-    .seg button.active.alon{ background:var(--alon-border); color:#0b1120; }
-    .seg button.active.kim { background:var(--kim-border); color:#020617; }
-    .seg button.active.other{ background:var(--other-border); color:#020617; }
+    /* פריטים */
+    .items{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+    }
 
-    /* FOOTER קטן */
+    .pill{
+      border-radius:10px;
+      border:1px solid;
+      padding:4px 6px;
+      font-size:11px;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .pill-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:6px;
+    }
+
+    .pill .meta{
+      font-size:10px;
+      opacity:0.7;
+    }
+
+    .pill.alon{
+      background:var(--alon-bg);
+      color:var(--alon-text);
+      border-color:var(--alon-border);
+    }
+    .pill.kim{
+      background:var(--kim-bg);
+      color:var(--kim-text);
+      border-color:var(--kim-border);
+    }
+    .pill.fam{
+      background:var(--fam-bg);
+      color:var(--fam-text);
+      border-color:var(--fam-border);
+    }
+    .pill.other{
+      background:var(--other-bg);
+      color:var(--other-text);
+      border-color:var(--other-border);
+    }
+
+    /* כפתור הוספת פריט אחד בכל תא – רק פלוס */
+    .add{
+      align-self:flex-start;
+      margin-top:2px;
+      border-radius:999px;
+      border:1px dashed #CBD5E1;
+      background:#F9FAFB;
+      padding:2px 9px;
+      font-size:14px;
+      cursor:pointer;
+      color:var(--text-muted);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .add:hover{
+      background:#E5F3FF;
+      border-style:solid;
+      border-color:#BFDBFE;
+      color:var(--accent);
+    }
+
     .footer{
-      margin-top:10px;
+      margin-top:8px;
       font-size:11px;
       color:var(--text-muted);
       text-align:center;
@@ -393,116 +311,116 @@
       border:none;
       border-radius:14px;
       padding:0;
-      background:#020617;
-      color:var(--text-main);
-      box-shadow:0 18px 45px rgba(0,0,0,0.6);
+      max-width:360px;
+      width:90vw;
     }
-
     .dlg{
       padding:14px 14px 10px;
-      min-width:260px;
     }
-
     .dlg h3{
-      margin:0 0 10px;
-      font-size:15px;
+      margin:0 0 8px;
+      font-size:16px;
     }
-
     .field{
       display:grid;
       gap:4px;
       margin-bottom:8px;
       font-size:12px;
     }
-
     .field label{
+      font-size:11px;
       color:var(--text-muted);
+    }
+    .row-fields{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    input, select, textarea{
+      font:inherit;
+      padding:6px 7px;
+      border-radius:8px;
+      border:1px solid #D1D5DB;
+    }
+    textarea{
+      resize:vertical;
+      min-height:50px;
+    }
+    .btns{
+      margin-top:8px;
+      display:flex;
+      justify-content:flex-end;
+      gap:6px;
+    }
+    .btn.sm{
+      padding:5px 9px;
       font-size:11px;
     }
 
-    input, select, textarea{
-      font:inherit;
-      padding:6px 8px;
-      border-radius:8px;
-      border:1px solid #1f2937;
-      background:#020617;
-      color:var(--text-main);
-    }
-    textarea{ resize:vertical; }
-
-    .row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:6px;
-    }
-
-    .btns{
-      margin-top:6px;
-      display:flex;
-      justify-content:flex-end;
-      gap:8px;
-    }
-
-    @media (max-width:900px){
-      .grid{
-        grid-template-columns:80px repeat(7,minmax(120px,1fr));
-      }
+    @media (max-width:768px){
       .wrap{
-        padding-inline:8px;
+        padding:12px;
+      }
+      h1{
+        font-size:20px;
+      }
+      .grid{
+        min-width:700px;
       }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>
-      WEEKLY PLANNER FOR COUPLES
-      <span class="mark">Kimka</span>
-    </h1>
-
-    <p class="subtitle">have a good week 💛</p>
+    <h1>WEEKLY PLANNER FOR COUPLES</h1>
+    <p class="subtitle">have a good week ✨</p>
 
     <div class="topbar">
       <div class="legend">
-        <span class="badge"><span class="dot alon"></span>אלון</span>
-        <span class="badge"><span class="dot kim"></span>קים</span>
-        <span class="badge"><span class="dot fam"></span>משפחה</span>
-        <span class="badge"><span class="dot other"></span>אחר / סבתא</span>
+        <span class="badge">
+          <span class="dot" style="background:var(--alon-bg); border:1px solid var(--alon-border);"></span>
+          אלון
+        </span>
+        <span class="badge">
+          <span class="dot" style="background:var(--kim-bg); border:1px solid var(--kim-border);"></span>
+          קים
+        </span>
+        <span class="badge">
+          <span class="dot" style="background:var(--fam-bg); border:1px solid var(--fam-border);"></span>
+          משפחה
+        </span>
+        <span class="badge">
+          <span class="dot" style="background:var(--other-bg); border:1px solid var(--other-border);"></span>
+          אחר
+        </span>
       </div>
-      <button class="admin-toggle" id="adminToggle">
-        ⚙ Admin
-      </button>
+
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span id="syncStatus" class="status">Local only</span>
+        <button id="resetWeek" class="btn danger" type="button">Reset week</button>
+      </div>
     </div>
 
-    <div class="admin-panel" id="adminPanel">
-      פעולות ניהול (בשבילך בלבד, קים לא חייבת לגעת בזה):
-      <div class="admin-grid">
-        <button class="btn danger" id="resetWeek">איפוס שבוע</button>
-        <button class="btn" id="export">ייצוא JSON</button>
-        <label class="btn">
-          ייבוא JSON
-          <input id="importFile" type="file" accept="application/json" style="display:none">
-        </label>
-      </div>
+    <div class="grid-scroll">
+      <div id="grid" class="grid"></div>
     </div>
-
-    <div id="grid" class="grid"></div>
 
     <div class="footer">
-      בחירת לוקח/ת ואוסף/ת מסונכרנת בזמן אמת בין המכשירים (Firebase).<br>
-      עריכה מתבצעת על ידי לחיצה על המשבצות או האירועים.
+      בבוקר: מי <b>לוקח/ת לגן</b> (א׳–ה׳). אחה״צ: מי <b>אוסף/ת</b> (א׳–ה׳). הבחירה בלעדית לכל יום.
     </div>
   </div>
 
-  <!-- דיאלוג עריכה -->
+  <!-- דיאלוג הוספה / עריכה -->
   <dialog id="dlg">
     <form method="dialog" class="dlg">
       <h3>עריכת פריט</h3>
+
       <div class="field">
         <label>כותרת</label>
-        <input id="title">
+        <input id="title" />
       </div>
-      <div class="row">
+
+      <div class="row-fields">
         <div class="field">
           <label>יום</label>
           <select id="day"></select>
@@ -517,6 +435,7 @@
           </select>
         </div>
       </div>
+
       <div class="field">
         <label>שייך ל</label>
         <select id="person">
@@ -526,102 +445,95 @@
           <option>אחר</option>
         </select>
       </div>
+
       <div class="field">
         <label>הערות</label>
-        <textarea id="notes" rows="3"></textarea>
+        <textarea id="notes"></textarea>
       </div>
+
       <div class="btns">
-        <button type="button" class="btn danger" id="deleteBtn">מחיקה</button>
-        <button type="button" class="btn" value="cancel" id="cancelBtn">ביטול</button>
-        <button type="button" class="btn" id="saveBtn">שמירה</button>
+        <button class="btn sm danger" id="deleteBtn" type="button">מחיקה</button>
+        <button class="btn sm" value="cancel">ביטול</button>
+        <button class="btn sm" id="saveBtn" type="button" style="background:var(--accent);color:#fff;border-color:var(--accent);">
+          שמירה
+        </button>
       </div>
     </form>
   </dialog>
 
-  <!-- Firebase (compat) + config -->
+  <!-- Firebase SDKs (אותן גרסאות כמו קודם) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <!-- בקובץ זה אתה שומר את FIREBASE_CFG ו-HOUSEHOLD_ID כמו שכבר יש לך -->
+  <!-- config.js שלך עם FIREBASE_CFG ו-HOUSEHOLD_ID -->
   <script src="config.js"></script>
 
   <script>
     const DAYS = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
     const SLOTS = ["בוקר","מהלך היום","אחה״צ","ערב"];
-
     const LS_KEY = "weekly-planner-sync-local";
 
     let state = loadLocal() || {
-      dropoff: Array(7).fill(null),
-      pickup: Array(7).fill(null),
-      events: []
+      dropoff:Array(7).fill(null),
+      pickup:Array(7).fill(null),
+      events:[]
     };
-    let events = state.events || [];
+    let events = state.events;
 
     let saveTimer = null;
     let applyingRemote = false;
-
-    let db = null;
-    let docRef = null;
-    let unsub = null;
+    let db = null, docRef = null, unsub = null;
     let householdId = window.HOUSEHOLD_ID || "alon-kim";
 
-    const grid = document.getElementById('grid');
-    const dlg = document.getElementById('dlg');
-    const titleEl = document.getElementById('title');
-    const dayEl = document.getElementById('day');
-    const slotEl = document.getElementById('slot');
-    const personEl = document.getElementById('person');
-    const notesEl = document.getElementById('notes');
-    const saveBtn = document.getElementById('saveBtn');
-    const deleteBtn = document.getElementById('deleteBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const exportBtn = document.getElementById('export');
-    const importFile = document.getElementById('importFile');
-    const resetWeekBtn = document.getElementById('resetWeek');
-    const adminToggle = document.getElementById('adminToggle');
-    const adminPanel = document.getElementById('adminPanel');
+    const grid = document.getElementById("grid");
+    const resetWeekBtn = document.getElementById("resetWeek");
+    const syncStatus = document.getElementById("syncStatus");
 
-    adminToggle.addEventListener('click', () => {
-      const open = adminPanel.style.display === 'block';
-      adminPanel.style.display = open ? 'none' : 'block';
-    });
+    const dlg = document.getElementById("dlg");
+    const titleEl = document.getElementById("title");
+    const dayEl = document.getElementById("day");
+    const slotEl = document.getElementById("slot");
+    const personEl = document.getElementById("person");
+    const notesEl = document.getElementById("notes");
+    const saveBtn = document.getElementById("saveBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
 
-    function loadLocal(){
-      try{
-        const raw = localStorage.getItem(LS_KEY);
-        return raw ? JSON.parse(raw) : null;
-      }catch(e){ return null; }
-    }
+    let editingId = null;
+
+    function id(){ return Math.random().toString(36).slice(2,9); }
+
     function saveLocal(){
       localStorage.setItem(LS_KEY, JSON.stringify({ ...state, events }));
     }
-
-    function pillClass(person){
-      switch(person){
-        case "אלון": return "alon";
-        case "קים": return "kim";
-        case "משפחה": return "fam";
-        default: return "other";
-      }
-    }
-
-    function cleanupWeekendSpecials(){
-      events = events.filter(e => {
-        const isWeekend = e.day >= 5;
-        const isSpecial = (e.slot === 0 || e.slot === 2) &&
-                         (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"));
-        return !(isWeekend && isSpecial);
-      });
-      state.dropoff[5] = state.dropoff[6] = null;
-      state.pickup[5]  = state.pickup[6]  = null;
-      state.events = events;
+    function loadLocal(){
+      try{ return JSON.parse(localStorage.getItem(LS_KEY)); }
+      catch(e){ return null; }
     }
 
     function renderDaysSelect(){
       dayEl.innerHTML = DAYS.map((d,i)=>`<option value="${i}">${d}</option>`).join("");
     }
     renderDaysSelect();
+
+    function pillClass(p){
+      if(p==="אלון") return "alon";
+      if(p==="קים")  return "kim";
+      if(p==="משפחה") return "fam";
+      return "other";
+    }
+
+    function cleanupWeekendSpecials(){
+      // אין לוקח/אוסף בשישי שבת
+      events = events.filter(e=>{
+        const weekend = e.day >= 5;
+        const isSpecial = (e.slot===0 || e.slot===2) &&
+          (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"));
+        return !(weekend && isSpecial);
+      });
+      state.dropoff[5] = state.dropoff[6] = null;
+      state.pickup[5]  = state.pickup[6]  = null;
+      state.events = events;
+    }
 
     function render(){
       cleanupWeekendSpecials();
@@ -630,48 +542,45 @@
       // שורת כותרות
       grid.append(headCell(""));
       for(let d=0; d<7; d++){
-        const h = document.createElement('div');
-        h.className = "head";
-        const dayName = DAYS[d];
-        h.innerHTML = `<span class="day-label">${dayName}</span>`;
-        grid.append(h);
+        grid.append(headCell(DAYS[d]));
       }
 
-      // שורות זמן
-      for(let s=0; s<SLOTS.length; s++){
+      // שורות של חלקי היום
+      for(let s=0; s<4; s++){
         grid.append(rowHead(SLOTS[s]));
         for(let d=0; d<7; d++){
-          const items = events.filter(e => e.day === d && e.slot === s);
+          const items = events.filter(e=>e.day===d && e.slot===s);
           grid.append(cell(d,s,items));
         }
       }
     }
 
-    function headCell(txt){
-      const div = document.createElement('div');
+    function headCell(text){
+      const div = document.createElement("div");
       div.className = "head";
-      div.textContent = txt || "";
+      div.textContent = text;
       return div;
     }
 
-    function rowHead(txt){
-      const div = document.createElement('div');
+    function rowHead(text){
+      const div = document.createElement("div");
       div.className = "rowhead";
-      div.textContent = txt;
+      div.textContent = text;
       return div;
     }
 
     function makeExclusiveSeg(current, onChange){
-      const seg = document.createElement('div');
+      const seg = document.createElement("div");
       seg.className = "seg";
       const options = ["אלון","קים","סבתא"];
+      const btns = [];
 
-      const btns = options.map(name => {
-        const b = document.createElement('button');
+      options.forEach(opt=>{
+        const b = document.createElement("button");
         b.type = "button";
-        b.textContent = name;
+        b.textContent = opt;
         seg.appendChild(b);
-        return b;
+        btns.push(b);
       });
 
       function paint(val){
@@ -679,15 +588,15 @@
           const who = options[i];
           b.className = "";
           if(val === who){
-            let cls = "active ";
-            cls += who === "אלון" ? "alon" : (who === "קים" ? "kim" : "other");
-            b.className = cls;
+            if(who==="אלון") b.classList.add("active-alon");
+            else if(who==="קים") b.classList.add("active-kim");
+            else b.classList.add("active-other");
           }
         });
       }
 
       btns.forEach((b,i)=>{
-        b.addEventListener('click', ()=>{
+        b.addEventListener("click", ()=>{
           const who = options[i];
           const next = (current === who) ? null : who;
           current = next;
@@ -701,8 +610,10 @@
     }
 
     function upsertSpecialEvent(day, slot, label, who){
-      events = events.filter(e => !(e.day === day && e.slot === slot &&
-             (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"))));
+      // הסר קודם כל אירוע מיוחד קיים
+      events = events.filter(e => !(e.day===day && e.slot===slot &&
+        (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"))));
+
       if(who){
         const person = (who === "סבתא") ? "אחר" : who;
         events.push({
@@ -719,103 +630,95 @@
     }
 
     function cell(day, slot, items){
-      const outer = document.createElement('div');
-      outer.className = "cell";
-      const inner = document.createElement('div');
-      inner.className = "cell-inner";
-      outer.appendChild(inner);
+      const div = document.createElement("div");
+      div.className = "cell";
 
-      if((slot === 0 || slot === 2) && day < 5){
-        const role = document.createElement('div');
-        role.className = "role-row";
-        const label = document.createElement('span');
-        label.textContent = (slot === 0) ? "לוקח/ת לגן:" : "אוסף/ת:";
-        const seg = makeExclusiveSeg(
-          slot === 0 ? state.dropoff[day] : state.pickup[day],
-          (val)=>{
-            if(slot === 0){
-              state.dropoff[day] = val;
-              upsertSpecialEvent(day,0,"לוקח/ת לגן", val);
-            }else{
-              state.pickup[day] = val;
-              upsertSpecialEvent(day,2,"אוסף/ת", val);
-            }
-            render();
+      const inner = document.createElement("div");
+      inner.className = "cell-inner";
+
+      // לוקח / אוסף רק א׳–ה׳, בוקר / אחה"צ
+      if(day < 5 && (slot === 0 || slot === 2)){
+        const role = document.createElement("div");
+        role.className = "role";
+        const label = document.createElement("span");
+        label.textContent = slot===0 ? "לוקח/ת לגן:" : "אוסף/ת:";
+
+        const current = (slot===0 ? state.dropoff[day] : state.pickup[day]) || null;
+        const seg = makeExclusiveSeg(current, (val)=>{
+          if(slot===0){
+            state.dropoff[day] = val;
+            upsertSpecialEvent(day,0,"לוקח/ת לגן",val);
+          } else {
+            state.pickup[day] = val;
+            upsertSpecialEvent(day,2,"אוסף/ת",val);
           }
-        );
-        role.append(label, seg);
+          render();
+        });
+
+        role.appendChild(label);
+        role.appendChild(seg);
         inner.appendChild(role);
       }
 
-      const dual = document.createElement('div');
-      dual.className = "dual";
+      const itemsContainer = document.createElement("div");
+      itemsContainer.className = "items";
 
-      const colA = document.createElement('div');
-      colA.className = "col";
-      const colK = document.createElement('div');
-      colK.className = "col";
-
-      colA.appendChild(colLabel("אלון","alon"));
-      colK.appendChild(colLabel("קים","kim"));
-
-      // shared (משפחה / אחר) – spanning
-      items.filter(i => i.person === "משפחה" || i.person === "אחר")
-           .forEach(item => {
-        const p = pillNode(item);
-        p.classList.add("spanAll");
-        dual.appendChild(p);
+      items.forEach(item=>{
+        const pill = pillNode(item);
+        itemsContainer.appendChild(pill);
       });
 
-      items.filter(i => i.person === "אלון").forEach(item=>{
-        colA.appendChild(pillNode(item));
+      inner.appendChild(itemsContainer);
+
+      // כפתור + יחיד בכל תא
+      const add = document.createElement("button");
+      add.type = "button";
+      add.className = "add";
+      add.textContent = "+";
+      add.addEventListener("click", ()=>{
+        openEditor({
+          id:null,
+          title:"",
+          day,
+          slot,
+          person:"אלון",
+          notes:""
+        });
       });
-      items.filter(i => i.person === "קים").forEach(item=>{
-        colK.appendChild(pillNode(item));
-      });
+      inner.appendChild(add);
 
-      colA.appendChild(addBtn(()=> openEditor({
-        id:null, day, slot, title:"", person:"אלון", notes:""
-      })));
-      colK.appendChild(addBtn(()=> openEditor({
-        id:null, day, slot, title:"", person:"קים", notes:""
-      })));
-
-      dual.append(colA,colK);
-      inner.appendChild(dual);
-
-      return outer;
-    }
-
-    function colLabel(name, cls){
-      const d = document.createElement('div');
-      d.className = "col-label";
-      const dot = document.createElement('span');
-      dot.className = "mini-dot " + cls;
-      d.append(dot, document.createTextNode(name));
-      return d;
+      div.appendChild(inner);
+      return div;
     }
 
     function pillNode(item){
-      const p = document.createElement('div');
+      const p = document.createElement("div");
       p.className = "pill " + pillClass(item.person);
-      p.innerHTML =
-        `<span class="title">${item.title}</span>` +
-        `<span class="meta">${item.person}${item.notes ? " • " + item.notes : ""}</span>`;
-      p.addEventListener('click', ()=> openEditor(item));
+
+      const t = document.createElement("div");
+      t.className = "pill-title";
+      const titleSpan = document.createElement("span");
+      titleSpan.textContent = item.title;
+      const whoSpan = document.createElement("span");
+      whoSpan.className = "meta";
+      whoSpan.textContent = item.person;
+      t.appendChild(titleSpan);
+      t.appendChild(whoSpan);
+      p.appendChild(t);
+
+      if(item.notes){
+        const notesDiv = document.createElement("div");
+        notesDiv.className = "meta";
+        notesDiv.textContent = item.notes;
+        p.appendChild(notesDiv);
+      }
+
+      p.addEventListener("click", ()=>{
+        openEditor(item);
+      });
+
       return p;
     }
-
-    function addBtn(onClick){
-      const btn = document.createElement('button');
-      btn.type = "button";
-      btn.className = "add";
-      btn.innerHTML = `<span class="plus">+</span>`;
-      btn.addEventListener('click', onClick);
-      return btn;
-    }
-
-    // ===== דיאלוג =====
-    let editingId = null;
 
     function openEditor(item){
       editingId = item.id;
@@ -828,7 +731,7 @@
       dlg.showModal();
     }
 
-    saveBtn.addEventListener('click', ()=>{
+    saveBtn.addEventListener("click", ()=>{
       const obj = {
         id: editingId || id(),
         title: titleEl.value.trim(),
@@ -841,62 +744,26 @@
         dlg.close();
         return;
       }
-      const idx = events.findIndex(e => e.id === obj.id);
-      if(idx >= 0) events[idx] = obj; else events.push(obj);
+      const idx = events.findIndex(e=>e.id===obj.id);
+      if(idx >= 0) events[idx] = obj;
+      else events.push(obj);
       state.events = events;
       scheduleSave();
       render();
       dlg.close();
     });
 
-    deleteBtn.addEventListener('click', ()=>{
+    deleteBtn.addEventListener("click", ()=>{
       if(!editingId) return;
-      events = events.filter(e => e.id !== editingId);
+      events = events.filter(e=>e.id !== editingId);
       state.events = events;
       scheduleSave();
       render();
       dlg.close();
     });
 
-    cancelBtn.addEventListener('click', ()=>{
-      dlg.close();
-    });
-
-    // ===== ייצוא / ייבוא / איפוס =====
-    exportBtn.addEventListener('click', ()=>{
-      const blob = new Blob(
-        [JSON.stringify({ ...state, events }, null, 2)],
-        { type: "application/json" }
-      );
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = "weekly-plan.json";
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-
-    importFile.addEventListener('change', e=>{
-      const file = e.target.files[0];
-      if(!file) return;
-      const reader = new FileReader();
-      reader.onload = ()=>{
-        try{
-          const data = JSON.parse(reader.result);
-          state = data;
-          events = data.events || [];
-          saveLocal();
-          scheduleSave();
-          render();
-        }catch(err){
-          alert("קובץ לא תקין");
-        }
-      };
-      reader.readAsText(file);
-    });
-
-    resetWeekBtn.addEventListener('click', ()=>{
-      if(!confirm("לאפס את כל השבוע?")) return;
+    resetWeekBtn.addEventListener("click", ()=>{
+      if(!confirm("לאפס את השבוע? כל המשימות + לוקח/ת / אוסף/ת יימחקו.")) return;
       state.dropoff = Array(7).fill(null);
       state.pickup  = Array(7).fill(null);
       events = [];
@@ -905,61 +772,62 @@
       render();
     });
 
-    // ===== UTIL =====
-    function id(){ return Math.random().toString(36).slice(2,9); }
-
-    // ===== FIREBASE =====
+    /* Firebase – שימוש ב-FIREBASE_CFG ו-HOUSEHOLD_ID מקובץ config.js */
     function initFirebase(){
       try{
         const cfg = window.FIREBASE_CFG;
         if(!cfg || !cfg.apiKey){
+          syncStatus.textContent = "Local only (no Firebase)";
           render();
           return;
         }
         const app = firebase.initializeApp(cfg);
-        db = firebase.firestore();
         const auth = firebase.auth();
+        db = firebase.firestore();
+        syncStatus.textContent = "Connecting…";
         auth.signInAnonymously()
-          .then(()=> initRealtime())
-          .catch(err => {
-            console.error("auth error", err);
+          .then(()=>{
+            syncStatus.textContent = "Connected";
+            initRealtime();
+          })
+          .catch(err=>{
+            console.error(err);
+            syncStatus.textContent = "Firebase error";
             render();
           });
-      }catch(e){
-        console.error("firebase init error", e);
+      } catch(err){
+        console.error(err);
+        syncStatus.textContent = "Config error";
         render();
       }
     }
 
     function initRealtime(){
-      if(!db) return render();
+      if(!db) { render(); return; }
       if(unsub) unsub();
-
       docRef = db.collection("plans").doc(householdId);
       docRef.get().then(snap=>{
         if(!snap.exists){
           docRef.set({
-            dropoff: state.dropoff,
-            pickup: state.pickup,
-            events: events,
+            ...state,
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
           });
         }
       });
-
       unsub = docRef.onSnapshot(doc=>{
         if(!doc.exists) return;
         applyingRemote = true;
         const data = doc.data();
         state = {
           dropoff: data.dropoff || Array(7).fill(null),
-          pickup: data.pickup || Array(7).fill(null),
-          events: data.events || []
+          pickup:  data.pickup  || Array(7).fill(null),
+          events:  data.events  || []
         };
         events = state.events;
         saveLocal();
         render();
         applyingRemote = false;
+        syncStatus.textContent = "Synced (" + householdId + ")";
       });
     }
 
@@ -969,17 +837,23 @@
       clearTimeout(saveTimer);
       saveTimer = setTimeout(()=>{
         docRef.set({
-          dropoff: state.dropoff,
-          pickup: state.pickup,
-          events: state.events || [],
+          ...state,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge:true });
+        syncStatus.textContent = "Saving…";
       }, 250);
     }
 
     // התחלה
     render();
     initFirebase();
+
+    // PWA service worker (אם יש service-worker.js ו־manifest)
+    if("serviceWorker" in navigator){
+      window.addEventListener("load", ()=>{
+        navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+      });
+    }
   </script>
 </body>
 </html>
