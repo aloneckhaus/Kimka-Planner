@@ -773,88 +773,176 @@
     });
 
     /* Firebase – שימוש ב-FIREBASE_CFG ו-HOUSEHOLD_ID מקובץ config.js */
-  /* Firebase – שימוש ב-FIREBASE_CFG ו-HOUSEHOLD_ID מקובץ config.js */
-function initFirebase(){
-  try{
+  // ===== SYNC WITH FIREBASE (ONLY THIS BLOCK IS NEW) =====
+
+// מצב סינכרון גלובלי
+let db = null;
+let docRef = null;
+let unsub = null;
+let applyingRemote = false;
+let saveTimer = null;
+
+// householdId כבר מוגדר אצלך למעלה:
+householdId = window.HOUSEHOLD_ID || householdId || "alon-kim";
+
+/**
+ * התחברות ל-Firebase ותחילת סינכרון
+ */
+function initFirebaseSync() {
+  try {
     const cfg = window.FIREBASE_CFG;
-    if(!cfg || !cfg.apiKey){
-      syncStatus.textContent = "Local only (no Firebase)";
+
+    // אם אין קונפיג – עובדים רק לוקלית
+    if (!cfg || !cfg.apiKey) {
+      if (typeof syncStatus !== "undefined") {
+        syncStatus.textContent = "Local only (no Firebase)";
+      }
+      // רק רינדור מקומי
       render();
       return;
     }
-    const app = firebase.initializeApp(cfg);
+
+    // מניעת אתחול כפול במקרה של טעינה מחדש
+    if (!firebase.apps.length) {
+      firebase.initializeApp(cfg);
+    }
+
     const auth = firebase.auth();
     db = firebase.firestore();
-    syncStatus.textContent = "Connecting…";
+
+    if (typeof syncStatus !== "undefined") {
+      syncStatus.textContent = "מתחבר…";
+    }
+
+    // התחברות אנונימית
     auth.signInAnonymously()
-      .then(()=>{
-        syncStatus.textContent = "Connected";
-        initRealtime();
+      .then(() => {
+        if (typeof syncStatus !== "undefined") {
+          syncStatus.textContent = "מחובר";
+        }
+        startRealtimeListener();
       })
-      .catch(err=>{
-        console.error(err);
-        syncStatus.textContent = "Firebase error";
+      .catch((err) => {
+        console.error("Firebase auth error:", err);
+        if (typeof syncStatus !== "undefined") {
+          syncStatus.textContent = "שגיאה בחיבור (עובד לוקלית)";
+        }
+        // גם אם יש שגיאה – נמשיך לעבוד לוקלית
         render();
       });
-  } catch(err){
-    console.error(err);
-    syncStatus.textContent = "Config error";
+  } catch (e) {
+    console.error("Firebase init error:", e);
+    if (typeof syncStatus !== "undefined") {
+      syncStatus.textContent = "שגיאה בהגדרת Firebase (לוקלי בלבד)";
+    }
     render();
   }
 }
 
-function initRealtime(){
-  if(!db) { render(); return; }
-  if(unsub) unsub();
+/**
+ * האזנה למסמך הרלוונטי ב-Firestore לפי householdId
+ */
+function startRealtimeListener() {
+  if (!db) {
+    render();
+    return;
+  }
+
+  // מנקים האזנה קודמת אם יש
+  if (unsub) {
+    unsub();
+    unsub = null;
+  }
+
   docRef = db.collection("plans").doc(householdId);
-  docRef.get().then(snap=>{
-    if(!snap.exists){
-      docRef.set({
-        ...state,
+
+  // אם המסמך עדיין לא קיים – ניצור אותו עם המצב הנוכחי
+  docRef.get().then((snap) => {
+    if (!snap.exists) {
+      return docRef.set({
+        dropoff: state.dropoff || Array(7).fill(null),
+        pickup: state.pickup || Array(7).fill(null),
+        events: events || [],
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
+  }).catch((err) => {
+    console.error("Firestore get error:", err);
   });
-  unsub = docRef.onSnapshot(doc=>{
-    if(!doc.exists) return;
+
+  // מאזין לשינויים בזמן אמת
+  unsub = docRef.onSnapshot((doc) => {
+    if (!doc.exists) return;
+
     applyingRemote = true;
-    const data = doc.data();
+
+    const data = doc.data() || {};
+
+    // מעדכנים את ה-state המקומי
     state = {
       dropoff: data.dropoff || Array(7).fill(null),
-      pickup:  data.pickup  || Array(7).fill(null),
-      events:  data.events  || []
+      pickup: data.pickup || Array(7).fill(null),
+      events: data.events || []
     };
-    events = state.events;
+    events = state.events || [];
+
+    // שומרים גם בלוקאל סטורג' כדי שתהיה טעינה מהירה
     saveLocal();
     render();
+
     applyingRemote = false;
-    syncStatus.textContent = "Synced (" + householdId + ")";
+
+    if (typeof syncStatus !== "undefined") {
+      syncStatus.textContent = `מסונכרן ✔ (${householdId})`;
+    }
+  }, (err) => {
+    console.error("Firestore listen error:", err);
+    if (typeof syncStatus !== "undefined") {
+      syncStatus.textContent = "שגיאת סינכרון (עובד לוקלית)";
+    }
   });
 }
 
-function scheduleSave(){
+/**
+ * שמירה לסרוור (Firestore) עם debounce קל כדי לא להפציץ את הענן
+ */
+function scheduleSave() {
+  // שומרים תמיד לוקלית
   saveLocal();
-  if(!db || !docRef || applyingRemote) return;
+
+  // אם אין Firebase / אין docRef / אנחנו באמצע "קבלה מרחוק" – לא שולחים לענן
+  if (!db || !docRef || applyingRemote) return;
+
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>{
-    docRef.set({
-      ...state,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    }, { merge:true });
-    syncStatus.textContent = "Saving…";
-  }, 250);
+  saveTimer = setTimeout(() => {
+    docRef.set(
+      {
+        dropoff: state.dropoff || Array(7).fill(null),
+        pickup: state.pickup || Array(7).fill(null),
+        events: events || [],
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      },
+      { merge: true }
+    ).then(() => {
+      if (typeof syncStatus !== "undefined") {
+        syncStatus.textContent = `מסונכרן ✔ (${householdId})`;
+      }
+    }).catch((err) => {
+      console.error("Firestore save error:", err);
+      if (typeof syncStatus !== "undefined") {
+        syncStatus.textContent = "שגיאה בשמירה (שמור מקומית)";
+      }
+    });
+  }, 250); // רבע שנייה – נעים לעין, לא כבד לענן
 }
 
-// התחלה
-render();
-initFirebase();
+// הפעלה ראשונית – רינדור + התחלת סינכרון
+document.addEventListener("DOMContentLoaded", () => {
+  render();
+  initFirebaseSync();
+});
 
-// PWA service worker (אם יש service-worker.js ו־manifest)
-if("serviceWorker" in navigator){
-  window.addEventListener("load", ()=>{
-    navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
-  });
-}
+// ===== END SYNC BLOCK =====
 
   </script>
 </body>
