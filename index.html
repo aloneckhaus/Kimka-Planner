@@ -773,87 +773,89 @@
     });
 
     /* Firebase – שימוש ב-FIREBASE_CFG ו-HOUSEHOLD_ID מקובץ config.js */
-    function initFirebase(){
-      try{
-        const cfg = window.FIREBASE_CFG;
-        if(!cfg || !cfg.apiKey){
-          syncStatus.textContent = "Local only (no Firebase)";
-          render();
-          return;
-        }
-        const app = firebase.initializeApp(cfg);
-        const auth = firebase.auth();
-        db = firebase.firestore();
-        syncStatus.textContent = "Connecting…";
-        auth.signInAnonymously()
-          .then(()=>{
-            syncStatus.textContent = "Connected";
-            initRealtime();
-          })
-          .catch(err=>{
-            console.error(err);
-            syncStatus.textContent = "Firebase error";
-            render();
-          });
-      } catch(err){
+  /* Firebase – שימוש ב-FIREBASE_CFG ו-HOUSEHOLD_ID מקובץ config.js */
+function initFirebase(){
+  try{
+    const cfg = window.FIREBASE_CFG;
+    if(!cfg || !cfg.apiKey){
+      syncStatus.textContent = "Local only (no Firebase)";
+      render();
+      return;
+    }
+    const app = firebase.initializeApp(cfg);
+    const auth = firebase.auth();
+    db = firebase.firestore();
+    syncStatus.textContent = "Connecting…";
+    auth.signInAnonymously()
+      .then(()=>{
+        syncStatus.textContent = "Connected";
+        initRealtime();
+      })
+      .catch(err=>{
         console.error(err);
-        syncStatus.textContent = "Config error";
+        syncStatus.textContent = "Firebase error";
         render();
-      }
-    }
-
-    function initRealtime(){
-      if(!db) { render(); return; }
-      if(unsub) unsub();
-      docRef = db.collection("plans").doc(householdId);
-      docRef.get().then(snap=>{
-        if(!snap.exists){
-          docRef.set({
-            ...state,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-        }
       });
-      unsub = docRef.onSnapshot(doc=>{
-        if(!doc.exists) return;
-        applyingRemote = true;
-        const data = doc.data();
-        state = {
-          dropoff: data.dropoff || Array(7).fill(null),
-          pickup:  data.pickup  || Array(7).fill(null),
-          events:  data.events  || []
-        };
-        events = state.events;
-        saveLocal();
-        render();
-        applyingRemote = false;
-        syncStatus.textContent = "Synced (" + householdId + ")";
-      });
-    }
-
-    function scheduleSave(){
-      saveLocal();
-      if(!db || !docRef || applyingRemote) return;
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(()=>{
-        docRef.set({
-          ...state,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge:true });
-        syncStatus.textContent = "Saving…";
-      }, 250);
-    }
-
-    // התחלה
+  } catch(err){
+    console.error(err);
+    syncStatus.textContent = "Config error";
     render();
-    initFirebase();
+  }
+}
 
-    // PWA service worker (אם יש service-worker.js ו־manifest)
-    if("serviceWorker" in navigator){
-      window.addEventListener("load", ()=>{
-        navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+function initRealtime(){
+  if(!db) { render(); return; }
+  if(unsub) unsub();
+  docRef = db.collection("plans").doc(householdId);
+  docRef.get().then(snap=>{
+    if(!snap.exists){
+      docRef.set({
+        ...state,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
     }
+  });
+  unsub = docRef.onSnapshot(doc=>{
+    if(!doc.exists) return;
+    applyingRemote = true;
+    const data = doc.data();
+    state = {
+      dropoff: data.dropoff || Array(7).fill(null),
+      pickup:  data.pickup  || Array(7).fill(null),
+      events:  data.events  || []
+    };
+    events = state.events;
+    saveLocal();
+    render();
+    applyingRemote = false;
+    syncStatus.textContent = "Synced (" + householdId + ")";
+  });
+}
+
+function scheduleSave(){
+  saveLocal();
+  if(!db || !docRef || applyingRemote) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    docRef.set({
+      ...state,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge:true });
+    syncStatus.textContent = "Saving…";
+  }, 250);
+}
+
+// התחלה
+render();
+initFirebase();
+
+// PWA service worker (אם יש service-worker.js ו־manifest)
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=>{
+    navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+  });
+}
+
   </script>
 </body>
 </html>
