@@ -7,30 +7,30 @@
 
   <style>
     :root{
-      /* צבעי בעלים / משפחה */
-      --alon-bg: rgba(253, 224, 71, 0.18);
-      --alon-text:#92400E;
-      --alon-border:#FACC15;
+      /* צבעי בעלים */
+      --alon-bg: rgba(253, 224, 71, 0.16);
+      --alon-text:#854d0e;
+      --alon-border:#facc15;
 
-      --kim-bg: rgba(129, 140, 248, 0.18);
-      --kim-text:#3730A3;
-      --kim-border:#818CF8;
+      --kim-bg: rgba(129, 140, 248, 0.16);
+      --kim-text:#3730a3;
+      --kim-border:#818cf8;
 
-      --fam-bg: rgba(45, 212, 191, 0.18);
-      --fam-text:#065F46;
-      --fam-border:#5EEAD4;
+      --fam-bg: rgba(45, 212, 191, 0.16);
+      --fam-text:#065f46;
+      --fam-border:#5eead4;
 
-      --other-bg: rgba(148, 163, 184, 0.18);
+      --other-bg: rgba(148, 163, 184, 0.16);
       --other-text:#111827;
-      --other-border:#94A3B8;
+      --other-border:#94a3b8;
 
-      --bg-page:#F3F4F6;
+      --grid-border:#E5E7EB;
+      --bg-main:#EEF2FF;   /* בהיר בסגול/כחול, סטייל גוגל קלנדר */
+      --bg-main-2:#E0F2FE;
       --bg-card:#FFFFFF;
-      --border-grid:#E5E7EB;
-      --border-strong:#D1D5DB;
       --text-main:#111827;
       --text-muted:#6B7280;
-      --accent:#1D4ED8;
+      --accent:#2563EB;
     }
 
     *{ box-sizing:border-box; }
@@ -38,7 +38,10 @@
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      background:var(--bg-page);
+      background:
+        radial-gradient(circle at top left, var(--bg-main) 0, transparent 60%),
+        radial-gradient(circle at bottom right, var(--bg-main-2) 0, transparent 55%),
+        #F3F4F6;
       color:var(--text-main);
     }
 
@@ -51,11 +54,8 @@
     h1{
       margin:0 0 4px;
       font-size:24px;
-      font-weight:600;
-      display:flex;
-      align-items:center;
-      gap:8px;
-      color:var(--accent);
+      font-weight:700;
+      letter-spacing:0.04em;
     }
 
     .subtitle{
@@ -66,245 +66,187 @@
 
     .topbar{
       display:flex;
-      justify-content:space-between;
       align-items:center;
+      justify-content:space-between;
       gap:8px;
       margin-bottom:12px;
-      flex-wrap:wrap;
     }
 
-    .legend{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      font-size:12px;
-      color:var(--text-muted);
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:5px;
-    }
-
-    .dot{
-      width:11px;
-      height:11px;
-      border-radius:999px;
-      display:inline-block;
-    }
-
-    .btn{
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid var(--border-strong);
-      background:#FFFFFF;
-      cursor:pointer;
-      font-size:12px;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-    }
-    .btn:active{
-      transform:translateY(1px);
-    }
-    .btn.danger{
-      border-color:#FCA5A5;
-      color:#B91C1C;
-      background:#FEF2F2;
-    }
-
-    .status{
+    .sync-badge{
       font-size:11px;
-      color:var(--text-muted);
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+      color:#4b5563;
+      background:rgba(255,255,255,0.8);
+      backdrop-filter:blur(8px);
     }
 
-    /* אזור הגריד + גלילה נוחה בנייד */
-    .grid-scroll{
-      margin-top:8px;
+    .grid-shell{
+      background:linear-gradient(90deg, rgba(37,99,235,0.12), rgba(56,189,248,0.1));
+      padding:6px;
+      border-radius:18px;
+      box-shadow:0 18px 40px rgba(15,23,42,0.18);
+    }
+
+    .grid-wrapper{
       background:var(--bg-card);
-      border-radius:16px;
-      box-shadow:0 10px 25px rgba(15,23,42,0.08);
-      border:1px solid var(--border-grid);
+      border-radius:14px;
+      padding:8px;
       overflow-x:auto;
       -webkit-overflow-scrolling:touch;
     }
 
     .grid{
-      min-width:900px;
+      min-width:720px;
       display:grid;
-      grid-template-columns: 120px repeat(7, minmax(120px,1fr));
-      border-collapse:collapse;
+      grid-template-columns:120px repeat(7, minmax(110px,1fr));
+      border:1px solid var(--grid-border);
+      border-radius:10px;
+      overflow:hidden;
+    }
+
+    .cell{
+      min-height:120px;
+      border-top:1px solid var(--grid-border);
+      border-left:1px solid var(--grid-border);
+      padding:6px;
+      background:#fff;
     }
 
     .head{
       position:sticky;
       top:0;
-      z-index:3;
       background:#F9FAFB;
-      padding:10px 6px;
+      z-index:3;
+      border-bottom:1px solid var(--grid-border);
+      border-left:1px solid var(--grid-border);
       text-align:center;
       font-weight:600;
+      padding:8px 4px;
       font-size:13px;
-      border-bottom:1px solid var(--border-grid);
-      border-left:1px solid var(--border-grid);
+      color:#111827;
     }
 
     .head:first-child{
-      border-top-right-radius:16px;
-    }
-    .head:last-child{
-      border-top-left-radius:16px;
+      border-left:none;
     }
 
     .rowhead{
       position:sticky;
       left:0;
-      z-index:2;
       background:#F9FAFB;
-      padding:10px 6px;
-      font-weight:500;
-      font-size:12px;
-      border-bottom:1px solid var(--border-grid);
-      border-left:1px solid var(--border-grid);
-    }
-
-    .cell{
-      min-height:120px;
-      padding:6px;
-      border-left:1px solid var(--border-grid);
-      border-bottom:1px solid var(--border-grid);
-      font-size:12px;
-    }
-
-    .cell-inner{
+      z-index:2;
+      border-right:1px solid var(--grid-border);
+      font-weight:600;
+      padding:8px;
+      font-size:13px;
+      color:#111827;
       display:flex;
-      flex-direction:column;
+      align-items:center;
+      justify-content:space-between;
       gap:4px;
-      height:100%;
     }
 
-    /* בחירת לוקח/ת / אוסף/ת */
+    .slot-tag{
+      font-size:11px;
+      padding:2px 6px;
+      border-radius:999px;
+      background:#E5E7EB;
+      color:#374151;
+    }
+
+    .pill{
+      border:1px solid;
+      border-radius:10px;
+      padding:4px 6px;
+      margin-bottom:4px;
+      font-size:12px;
+      cursor:pointer;
+      transition:background 0.12s ease, transform 0.08s ease;
+    }
+
+    .pill:hover{
+      transform:translateY(-1px);
+    }
+
+    .pill .meta{
+      opacity:.8;
+      font-size:11px;
+    }
+
+    .alon{ background:var(--alon-bg); color:var(--alon-text); border-color:var(--alon-border); }
+    .kim{ background:var(--kim-bg); color:var(--kim-text); border-color:var(--kim-border); }
+    .fam{ background:var(--fam-bg); color:var(--fam-text); border-color:var(--fam-border); }
+    .other{ background:var(--other-bg); color:var(--other-text); border-color:var(--other-border); }
+
     .role{
       display:flex;
       align-items:center;
-      gap:6px;
-      flex-wrap:wrap;
-      margin-bottom:3px;
+      justify-content:space-between;
+      gap:4px;
+      margin-bottom:4px;
+    }
+
+    .role label{
       font-size:11px;
-      color:var(--text-muted);
+      color:#4B5563;
     }
 
     .seg{
       display:inline-flex;
-      border-radius:999px;
       border:1px solid #CBD5E1;
+      border-radius:999px;
       overflow:hidden;
       background:#F9FAFB;
     }
 
     .seg button{
+      padding:3px 8px;
       border:none;
       background:transparent;
-      padding:3px 7px;
       cursor:pointer;
       font-size:11px;
-      color:var(--text-muted);
+      color:#4B5563;
       white-space:nowrap;
     }
 
-    .seg button.active-alon{
-      background:var(--alon-bg);
-      color:var(--alon-text);
-    }
-    .seg button.active-kim{
-      background:var(--kim-bg);
-      color:var(--kim-text);
-    }
-    .seg button.active-other{
-      background:var(--other-bg);
-      color:var(--other-text);
-    }
+    .seg button.active.alon{ background:rgba(253,224,71,0.45); color:#854d0e; }
+    .seg button.active.kim{ background:rgba(129,140,248,0.45); color:#3730a3; }
+    .seg button.active.other{ background:rgba(148,163,184,0.4); color:#111827; }
 
-    /* פריטים */
-    .items{
-      flex:1;
-      display:flex;
-      flex-direction:column;
-      gap:3px;
-    }
-
-    .pill{
-      border-radius:10px;
-      border:1px solid;
-      padding:4px 6px;
-      font-size:11px;
-      cursor:pointer;
-      display:flex;
-      flex-direction:column;
-      gap:2px;
-    }
-
-    .pill-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:6px;
-    }
-
-    .pill .meta{
-      font-size:10px;
-      opacity:0.7;
-    }
-
-    .pill.alon{
-      background:var(--alon-bg);
-      color:var(--alon-text);
-      border-color:var(--alon-border);
-    }
-    .pill.kim{
-      background:var(--kim-bg);
-      color:var(--kim-text);
-      border-color:var(--kim-border);
-    }
-    .pill.fam{
-      background:var(--fam-bg);
-      color:var(--fam-text);
-      border-color:var(--fam-border);
-    }
-    .pill.other{
-      background:var(--other-bg);
-      color:var(--other-text);
-      border-color:var(--other-border);
-    }
-
-    /* כפתור הוספת פריט אחד בכל תא – רק פלוס */
-    .add{
-      align-self:flex-start;
+    .events-stack{
       margin-top:2px;
-      border-radius:999px;
-      border:1px dashed #CBD5E1;
-      background:#F9FAFB;
-      padding:2px 9px;
-      font-size:14px;
-      cursor:pointer;
-      color:var(--text-muted);
+      margin-bottom:4px;
+    }
+
+    .add-one{
       display:inline-flex;
       align-items:center;
       justify-content:center;
+      width:22px;
+      height:22px;
+      border-radius:999px;
+      border:1px dashed #CBD5E1;
+      background:#F9FAFB;
+      color:#4B5563;
+      font-size:16px;
+      line-height:1;
+      cursor:pointer;
+      padding:0;
+      transition:background 0.12s ease, transform 0.08s ease;
     }
-    .add:hover{
-      background:#E5F3FF;
-      border-style:solid;
-      border-color:#BFDBFE;
-      color:var(--accent);
+
+    .add-one:hover{
+      background:#E5F0FF;
+      transform:translateY(-1px);
     }
 
     .footer{
-      margin-top:8px;
+      color:#6B7280;
       font-size:11px;
-      color:var(--text-muted);
-      text-align:center;
+      text-align:left;
+      margin-top:8px;
     }
 
     dialog{
@@ -314,113 +256,105 @@
       max-width:360px;
       width:90vw;
     }
+
     .dlg{
-      padding:14px 14px 10px;
+      padding:14px 16px 10px;
     }
+
     .dlg h3{
       margin:0 0 8px;
       font-size:16px;
     }
+
+    input,select,textarea,button{
+      font:inherit;
+    }
+
     .field{
       display:grid;
       gap:4px;
       margin-bottom:8px;
-      font-size:12px;
+      font-size:13px;
     }
-    .field label{
-      font-size:11px;
-      color:var(--text-muted);
-    }
-    .row-fields{
+
+    .row2{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:8px;
     }
-    input, select, textarea{
-      font:inherit;
-      padding:6px 7px;
-      border-radius:8px;
-      border:1px solid #D1D5DB;
-    }
-    textarea{
-      resize:vertical;
-      min-height:50px;
-    }
+
     .btns{
-      margin-top:8px;
       display:flex;
-      justify-content:flex-end;
-      gap:6px;
+      justify-content:space-between;
+      gap:8px;
+      margin-top:8px;
     }
-    .btn.sm{
-      padding:5px 9px;
-      font-size:11px;
+
+    .btn{
+      padding:7px 12px;
+      border-radius:10px;
+      border:1px solid #CBD5E1;
+      background:#F9FAFB;
+      cursor:pointer;
+      font-size:13px;
+    }
+
+    .btn.primary{
+      background:#2563EB;
+      color:white;
+      border-color:#2563EB;
+    }
+
+    .btn.danger{
+      background:#FEE2E2;
+      border-color:#FECACA;
+      color:#B91C1C;
     }
 
     @media (max-width:768px){
-      .wrap{
-        padding:12px;
-      }
-      h1{
-        font-size:20px;
-      }
-      .grid{
-        min-width:700px;
-      }
+      .wrap{ padding:10px; }
+      h1{ font-size:20px; }
+      .grid-shell{ padding:4px; }
+      .grid-wrapper{ padding:4px; }
+      .grid{ min-width:640px; }
+      .head{ font-size:12px; }
+      .rowhead{ font-size:12px; }
+      .cell{ min-height:100px; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <h1>WEEKLY PLANNER FOR COUPLES</h1>
-    <p class="subtitle">have a good week ✨</p>
+    <p class="subtitle">have a good week</p>
 
     <div class="topbar">
-      <div class="legend">
-        <span class="badge">
-          <span class="dot" style="background:var(--alon-bg); border:1px solid var(--alon-border);"></span>
-          אלון
-        </span>
-        <span class="badge">
-          <span class="dot" style="background:var(--kim-bg); border:1px solid var(--kim-border);"></span>
-          קים
-        </span>
-        <span class="badge">
-          <span class="dot" style="background:var(--fam-bg); border:1px solid var(--fam-border);"></span>
-          משפחה
-        </span>
-        <span class="badge">
-          <span class="dot" style="background:var(--other-bg); border:1px solid var(--other-border);"></span>
-          אחר
-        </span>
-      </div>
+      <span style="font-size:12px; color:#4B5563;">
+        בוקר / יום / אחה״צ / ערב · Drop-off & Pick-up לתיאו
+      </span>
+      <span id="syncStatus" class="sync-badge">Local only</span>
+    </div>
 
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span id="syncStatus" class="status">Local only</span>
-        <button id="resetWeek" class="btn danger" type="button">Reset week</button>
+    <div class="grid-shell">
+      <div class="grid-wrapper">
+        <div id="grid" class="grid"></div>
       </div>
     </div>
 
-    <div class="grid-scroll">
-      <div id="grid" class="grid"></div>
-    </div>
-
-    <div class="footer">
-      בבוקר: מי <b>לוקח/ת לגן</b> (א׳–ה׳). אחה״צ: מי <b>אוסף/ת</b> (א׳–ה׳). הבחירה בלעדית לכל יום.
-    </div>
+    <p class="footer">
+      בוקר (א׳–ה׳): מי לוקח לגן · אחה״צ (א׳–ה׳): מי אוסף. לכל משבצת אפשר להוסיף כמה פריטים, עם בחירה למי זה שייך בחלון העריכה.
+    </p>
   </div>
 
-  <!-- דיאלוג הוספה / עריכה -->
   <dialog id="dlg">
     <form method="dialog" class="dlg">
       <h3>עריכת פריט</h3>
-
       <div class="field">
         <label>כותרת</label>
         <input id="title" />
       </div>
 
-      <div class="row-fields">
+      <div class="row2">
         <div class="field">
           <label>יום</label>
           <select id="day"></select>
@@ -448,24 +382,22 @@
 
       <div class="field">
         <label>הערות</label>
-        <textarea id="notes"></textarea>
+        <textarea id="notes" rows="3"></textarea>
       </div>
 
       <div class="btns">
-        <button class="btn sm danger" id="deleteBtn" type="button">מחיקה</button>
-        <button class="btn sm" value="cancel">ביטול</button>
-        <button class="btn sm" id="saveBtn" type="button" style="background:var(--accent);color:#fff;border-color:var(--accent);">
-          שמירה
-        </button>
+        <button class="btn danger" id="deleteBtn" type="button">מחיקה</button>
+        <div style="flex:1"></div>
+        <button class="btn" value="cancel">ביטול</button>
+        <button class="btn primary" id="saveBtn" type="button">שמירה</button>
       </div>
     </form>
   </dialog>
 
-  <!-- Firebase SDKs (אותן גרסאות כמו קודם) -->
+  <!-- Firebase compat SDKs + קונפיג חיצוני -->
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-  <!-- config.js שלך עם FIREBASE_CFG ו-HOUSEHOLD_ID -->
   <script src="config.js"></script>
 
   <script>
@@ -473,22 +405,18 @@
     const SLOTS = ["בוקר","מהלך היום","אחה״צ","ערב"];
     const LS_KEY = "weekly-planner-sync-local";
 
-    let state = loadLocal() || {
-      dropoff:Array(7).fill(null),
-      pickup:Array(7).fill(null),
-      events:[]
-    };
-    let events = state.events;
-
-    let saveTimer = null;
+    // --- מצב כללי ---
+    let state = null;
+    let events = [];
+    let db = null;
+    let docRef = null;
+    let unsub = null;
     let applyingRemote = false;
-    let db = null, docRef = null, unsub = null;
+    let saveTimer = null;
     let householdId = window.HOUSEHOLD_ID || "alon-kim";
 
+    // --- DOM ---
     const grid = document.getElementById("grid");
-    const resetWeekBtn = document.getElementById("resetWeek");
-    const syncStatus = document.getElementById("syncStatus");
-
     const dlg = document.getElementById("dlg");
     const titleEl = document.getElementById("title");
     const dayEl = document.getElementById("day");
@@ -497,65 +425,69 @@
     const notesEl = document.getElementById("notes");
     const saveBtn = document.getElementById("saveBtn");
     const deleteBtn = document.getElementById("deleteBtn");
+    const syncStatus = document.getElementById("syncStatus");
 
-    let editingId = null;
-
-    function id(){ return Math.random().toString(36).slice(2,9); }
+    // --- עזרות מצב ---
+    function loadLocal(){
+      try{
+        return JSON.parse(localStorage.getItem(LS_KEY));
+      }catch(e){
+        return null;
+      }
+    }
 
     function saveLocal(){
       localStorage.setItem(LS_KEY, JSON.stringify({ ...state, events }));
     }
-    function loadLocal(){
-      try{ return JSON.parse(localStorage.getItem(LS_KEY)); }
-      catch(e){ return null; }
+
+    function initState(){
+      const saved = loadLocal();
+      if(saved){
+        state = {
+          dropoff: Array.isArray(saved.dropoff) && saved.dropoff.length===7 ? saved.dropoff : Array(7).fill(null),
+          pickup:  Array.isArray(saved.pickup)  && saved.pickup.length===7  ? saved.pickup  : Array(7).fill(null),
+          events:  Array.isArray(saved.events)  ? saved.events : []
+        };
+      }else{
+        state = {
+          dropoff:Array(7).fill(null),
+          pickup:Array(7).fill(null),
+          events:[]
+        };
+      }
+      events = state.events;
     }
 
-    function renderDaysSelect(){
-      dayEl.innerHTML = DAYS.map((d,i)=>`<option value="${i}">${d}</option>`).join("");
-    }
-    renderDaysSelect();
+    initState();
 
-    function pillClass(p){
-      if(p==="אלון") return "alon";
-      if(p==="קים")  return "kim";
-      if(p==="משפחה") return "fam";
+    function id(){
+      return Math.random().toString(36).slice(2,9);
+    }
+
+    function pillClass(person){
+      if(person==="אלון") return "alon";
+      if(person==="קים") return "kim";
+      if(person==="משפחה") return "fam";
       return "other";
     }
 
+    // מנקה אירועי dropoff/pickup מסופ"ש
     function cleanupWeekendSpecials(){
-      // אין לוקח/אוסף בשישי שבת
       events = events.filter(e=>{
-        const weekend = e.day >= 5;
+        const isWeekend = e.day >= 5;
         const isSpecial = (e.slot===0 || e.slot===2) &&
           (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"));
-        return !(weekend && isSpecial);
+        return !(isWeekend && isSpecial);
       });
-      state.dropoff[5] = state.dropoff[6] = null;
-      state.pickup[5]  = state.pickup[6]  = null;
+      state.dropoff[5] = null;
+      state.dropoff[6] = null;
+      state.pickup[5] = null;
+      state.pickup[6] = null;
       state.events = events;
     }
 
-    function render(){
-      cleanupWeekendSpecials();
-      grid.innerHTML = "";
-
-      // שורת כותרות
-      grid.append(headCell(""));
-      for(let d=0; d<7; d++){
-        grid.append(headCell(DAYS[d]));
-      }
-
-      // שורות של חלקי היום
-      for(let s=0; s<4; s++){
-        grid.append(rowHead(SLOTS[s]));
-        for(let d=0; d<7; d++){
-          const items = events.filter(e=>e.day===d && e.slot===s);
-          grid.append(cell(d,s,items));
-        }
-      }
-    }
-
-    function headCell(text){
+    // --- UI ---
+    function cellHead(text){
       const div = document.createElement("div");
       div.className = "head";
       div.textContent = text;
@@ -565,7 +497,12 @@
     function rowHead(text){
       const div = document.createElement("div");
       div.className = "rowhead";
-      div.textContent = text;
+      const span = document.createElement("span");
+      span.textContent = text;
+      const tag = document.createElement("span");
+      tag.className = "slot-tag";
+      tag.textContent = "•";
+      div.append(span, tag);
       return div;
     }
 
@@ -573,36 +510,33 @@
       const seg = document.createElement("div");
       seg.className = "seg";
       const options = ["אלון","קים","סבתא"];
-      const btns = [];
-
-      options.forEach(opt=>{
+      const btns = options.map(name=>{
         const b = document.createElement("button");
         b.type = "button";
-        b.textContent = opt;
+        b.textContent = name;
         seg.appendChild(b);
-        btns.push(b);
+        return b;
       });
 
       function paint(val){
         btns.forEach((b,i)=>{
           const who = options[i];
-          b.className = "";
           if(val === who){
-            if(who==="אלון") b.classList.add("active-alon");
-            else if(who==="קים") b.classList.add("active-kim");
-            else b.classList.add("active-other");
+            b.className = "active " + (who==="אלון"?"alon":who==="קים"?"kim":"other");
+          }else{
+            b.className = "";
           }
         });
       }
 
       btns.forEach((b,i)=>{
-        b.addEventListener("click", ()=>{
+        b.onclick = ()=>{
           const who = options[i];
-          const next = (current === who) ? null : who;
+          const next = (current===who) ? null : who;
           current = next;
           paint(current);
           onChange(current);
-        });
+        };
       });
 
       paint(current);
@@ -610,115 +544,124 @@
     }
 
     function upsertSpecialEvent(day, slot, label, who){
-      // הסר קודם כל אירוע מיוחד קיים
-      events = events.filter(e => !(e.day===day && e.slot===slot &&
-        (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"))));
+      // מוחק אירוע מיוחד קודם באותו תא
+      events = events.filter(e=>!(
+        e.day===day &&
+        e.slot===slot &&
+        (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"))
+      ));
 
       if(who){
-        const person = (who === "סבתא") ? "אחר" : who;
+        const person = (who==="סבתא") ? "אחר" : who;
         events.push({
-          id: id(),
+          id:id(),
           day,
           slot,
-          title: label,
+          title:label,
           person,
           notes:""
         });
       }
+
       state.events = events;
       scheduleSave();
+    }
+
+    function pillNode(item){
+      const p = document.createElement("div");
+      p.className = "pill " + pillClass(item.person);
+      p.innerHTML =
+        '<div><strong>' + item.title + '</strong> ' +
+        '<span class="meta">• ' + item.person + '</span></div>' +
+        (item.notes ? '<div class="meta">' + item.notes + '</div>' : '');
+      p.addEventListener("click", ()=> openEditor(item));
+      return p;
+    }
+
+    function addBtn(day, slot){
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "add-one";
+      btn.textContent = "+";
+      btn.addEventListener("click", ()=>{
+        openEditor({
+          id:null,
+          day,
+          slot,
+          title:"",
+          person:"אלון",
+          notes:""
+        });
+      });
+      return btn;
     }
 
     function cell(day, slot, items){
       const div = document.createElement("div");
       div.className = "cell";
 
-      const inner = document.createElement("div");
-      inner.className = "cell-inner";
-
-      // לוקח / אוסף רק א׳–ה׳, בוקר / אחה"צ
-      if(day < 5 && (slot === 0 || slot === 2)){
+      // פס בחירה מי לוקח / אוסף (בוקר / אחה"צ, א׳–ה׳ בלבד)
+      if((slot===0 || slot===2) && day < 5){
         const role = document.createElement("div");
         role.className = "role";
-        const label = document.createElement("span");
-        label.textContent = slot===0 ? "לוקח/ת לגן:" : "אוסף/ת:";
 
-        const current = (slot===0 ? state.dropoff[day] : state.pickup[day]) || null;
-        const seg = makeExclusiveSeg(current, (val)=>{
+        const label = document.createElement("label");
+        label.textContent = (slot===0 ? "לוקח/ת לגן:" : "אוסף/ת:");
+
+        const cur = (slot===0 ? state.dropoff[day] : state.pickup[day]);
+        const seg = makeExclusiveSeg(cur, val=>{
           if(slot===0){
             state.dropoff[day] = val;
-            upsertSpecialEvent(day,0,"לוקח/ת לגן",val);
-          } else {
+            upsertSpecialEvent(day, 0, "לוקח/ת לגן", val);
+          }else{
             state.pickup[day] = val;
-            upsertSpecialEvent(day,2,"אוסף/ת",val);
+            upsertSpecialEvent(day, 2, "אוסף/ת", val);
           }
           render();
         });
 
-        role.appendChild(label);
-        role.appendChild(seg);
-        inner.appendChild(role);
+        role.append(label, seg);
+        div.appendChild(role);
       }
 
-      const itemsContainer = document.createElement("div");
-      itemsContainer.className = "items";
-
+      const stack = document.createElement("div");
+      stack.className = "events-stack";
       items.forEach(item=>{
-        const pill = pillNode(item);
-        itemsContainer.appendChild(pill);
+        stack.appendChild(pillNode(item));
       });
+      div.appendChild(stack);
 
-      inner.appendChild(itemsContainer);
+      div.appendChild(addBtn(day, slot));
 
-      // כפתור + יחיד בכל תא
-      const add = document.createElement("button");
-      add.type = "button";
-      add.className = "add";
-      add.textContent = "+";
-      add.addEventListener("click", ()=>{
-        openEditor({
-          id:null,
-          title:"",
-          day,
-          slot,
-          person:"אלון",
-          notes:""
-        });
-      });
-      inner.appendChild(add);
-
-      div.appendChild(inner);
       return div;
     }
 
-    function pillNode(item){
-      const p = document.createElement("div");
-      p.className = "pill " + pillClass(item.person);
+    function renderDaySelect(){
+      dayEl.innerHTML = DAYS.map((d,i)=>`<option value="${i}">${d}</option>`).join("");
+    }
 
-      const t = document.createElement("div");
-      t.className = "pill-title";
-      const titleSpan = document.createElement("span");
-      titleSpan.textContent = item.title;
-      const whoSpan = document.createElement("span");
-      whoSpan.className = "meta";
-      whoSpan.textContent = item.person;
-      t.appendChild(titleSpan);
-      t.appendChild(whoSpan);
-      p.appendChild(t);
+    function render(){
+      cleanupWeekendSpecials();
+      grid.innerHTML = "";
 
-      if(item.notes){
-        const notesDiv = document.createElement("div");
-        notesDiv.className = "meta";
-        notesDiv.textContent = item.notes;
-        p.appendChild(notesDiv);
+      // שורת כותרת ימים
+      grid.appendChild(cellHead(""));
+      for(let d=0; d<7; d++){
+        grid.appendChild(cellHead(DAYS[d]));
       }
 
-      p.addEventListener("click", ()=>{
-        openEditor(item);
-      });
-
-      return p;
+      // שורות לפי חלקי היום
+      for(let s=0; s<4; s++){
+        grid.appendChild(rowHead(SLOTS[s]));
+        for(let d=0; d<7; d++){
+          const items = events.filter(e=>e.day===d && e.slot===s);
+          grid.appendChild(cell(d, s, items));
+        }
+      }
     }
+
+    // --- דיאלוג עריכה ---
+    let editingId = null;
 
     function openEditor(item){
       editingId = item.id;
@@ -745,8 +688,11 @@
         return;
       }
       const idx = events.findIndex(e=>e.id===obj.id);
-      if(idx >= 0) events[idx] = obj;
-      else events.push(obj);
+      if(idx>=0){
+        events[idx] = obj;
+      }else{
+        events.push(obj);
+      }
       state.events = events;
       scheduleSave();
       render();
@@ -762,188 +708,96 @@
       dlg.close();
     });
 
-    resetWeekBtn.addEventListener("click", ()=>{
-      if(!confirm("לאפס את השבוע? כל המשימות + לוקח/ת / אוסף/ת יימחקו.")) return;
-      state.dropoff = Array(7).fill(null);
-      state.pickup  = Array(7).fill(null);
-      events = [];
-      state.events = events;
-      scheduleSave();
-      render();
-    });
-
-    /* Firebase – שימוש ב-FIREBASE_CFG ו-HOUSEHOLD_ID מקובץ config.js */
-  // ===== SYNC WITH FIREBASE (ONLY THIS BLOCK IS NEW) =====
-
-// מצב סינכרון גלובלי
-let db = null;
-let docRef = null;
-let unsub = null;
-let applyingRemote = false;
-let saveTimer = null;
-
-// householdId כבר מוגדר אצלך למעלה:
-householdId = window.HOUSEHOLD_ID || householdId || "alon-kim";
-
-/**
- * התחברות ל-Firebase ותחילת סינכרון
- */
-function initFirebaseSync() {
-  try {
-    const cfg = window.FIREBASE_CFG;
-
-    // אם אין קונפיג – עובדים רק לוקלית
-    if (!cfg || !cfg.apiKey) {
-      if (typeof syncStatus !== "undefined") {
-        syncStatus.textContent = "Local only (no Firebase)";
-      }
-      // רק רינדור מקומי
-      render();
-      return;
-    }
-
-    // מניעת אתחול כפול במקרה של טעינה מחדש
-    if (!firebase.apps.length) {
-      firebase.initializeApp(cfg);
-    }
-
-    const auth = firebase.auth();
-    db = firebase.firestore();
-
-    if (typeof syncStatus !== "undefined") {
-      syncStatus.textContent = "מתחבר…";
-    }
-
-    // התחברות אנונימית
-    auth.signInAnonymously()
-      .then(() => {
-        if (typeof syncStatus !== "undefined") {
-          syncStatus.textContent = "מחובר";
+    // --- Firebase – שימוש ב-FIREBASE_CFG ו-HOUSEHOLD_ID מקובץ config.js ---
+    function initFirebase(){
+      try{
+        const cfg = window.FIREBASE_CFG;
+        if(!cfg || !cfg.apiKey){
+          syncStatus.textContent = "Local only (no Firebase)";
+          render();
+          return;
         }
-        startRealtimeListener();
-      })
-      .catch((err) => {
-        console.error("Firebase auth error:", err);
-        if (typeof syncStatus !== "undefined") {
-          syncStatus.textContent = "שגיאה בחיבור (עובד לוקלית)";
-        }
-        // גם אם יש שגיאה – נמשיך לעבוד לוקלית
+        const app = firebase.initializeApp(cfg);
+        const auth = firebase.auth();
+        db = firebase.firestore();
+        syncStatus.textContent = "Connecting…";
+        auth.signInAnonymously()
+          .then(()=>{
+            syncStatus.textContent = "Connected";
+            initRealtime();
+          })
+          .catch(err=>{
+            console.error(err);
+            syncStatus.textContent = "Firebase error";
+            render();
+          });
+      } catch(err){
+        console.error(err);
+        syncStatus.textContent = "Config error";
         render();
-      });
-  } catch (e) {
-    console.error("Firebase init error:", e);
-    if (typeof syncStatus !== "undefined") {
-      syncStatus.textContent = "שגיאה בהגדרת Firebase (לוקלי בלבד)";
-    }
-    render();
-  }
-}
-
-/**
- * האזנה למסמך הרלוונטי ב-Firestore לפי householdId
- */
-function startRealtimeListener() {
-  if (!db) {
-    render();
-    return;
-  }
-
-  // מנקים האזנה קודמת אם יש
-  if (unsub) {
-    unsub();
-    unsub = null;
-  }
-
-  docRef = db.collection("plans").doc(householdId);
-
-  // אם המסמך עדיין לא קיים – ניצור אותו עם המצב הנוכחי
-  docRef.get().then((snap) => {
-    if (!snap.exists) {
-      return docRef.set({
-        dropoff: state.dropoff || Array(7).fill(null),
-        pickup: state.pickup || Array(7).fill(null),
-        events: events || [],
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    }
-  }).catch((err) => {
-    console.error("Firestore get error:", err);
-  });
-
-  // מאזין לשינויים בזמן אמת
-  unsub = docRef.onSnapshot((doc) => {
-    if (!doc.exists) return;
-
-    applyingRemote = true;
-
-    const data = doc.data() || {};
-
-    // מעדכנים את ה-state המקומי
-    state = {
-      dropoff: data.dropoff || Array(7).fill(null),
-      pickup: data.pickup || Array(7).fill(null),
-      events: data.events || []
-    };
-    events = state.events || [];
-
-    // שומרים גם בלוקאל סטורג' כדי שתהיה טעינה מהירה
-    saveLocal();
-    render();
-
-    applyingRemote = false;
-
-    if (typeof syncStatus !== "undefined") {
-      syncStatus.textContent = `מסונכרן ✔ (${householdId})`;
-    }
-  }, (err) => {
-    console.error("Firestore listen error:", err);
-    if (typeof syncStatus !== "undefined") {
-      syncStatus.textContent = "שגיאת סינכרון (עובד לוקלית)";
-    }
-  });
-}
-
-/**
- * שמירה לסרוור (Firestore) עם debounce קל כדי לא להפציץ את הענן
- */
-function scheduleSave() {
-  // שומרים תמיד לוקלית
-  saveLocal();
-
-  // אם אין Firebase / אין docRef / אנחנו באמצע "קבלה מרחוק" – לא שולחים לענן
-  if (!db || !docRef || applyingRemote) return;
-
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => {
-    docRef.set(
-      {
-        dropoff: state.dropoff || Array(7).fill(null),
-        pickup: state.pickup || Array(7).fill(null),
-        events: events || [],
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      },
-      { merge: true }
-    ).then(() => {
-      if (typeof syncStatus !== "undefined") {
-        syncStatus.textContent = `מסונכרן ✔ (${householdId})`;
       }
-    }).catch((err) => {
-      console.error("Firestore save error:", err);
-      if (typeof syncStatus !== "undefined") {
-        syncStatus.textContent = "שגיאה בשמירה (שמור מקומית)";
+    }
+
+    function initRealtime(){
+      if(!db){
+        render();
+        return;
       }
-    });
-  }, 250); // רבע שנייה – נעים לעין, לא כבד לענן
-}
+      if(unsub) unsub();
 
-// הפעלה ראשונית – רינדור + התחלת סינכרון
-document.addEventListener("DOMContentLoaded", () => {
-  render();
-  initFirebaseSync();
-});
+      docRef = db.collection("plans").doc(householdId);
 
-// ===== END SYNC BLOCK =====
+      // אם המסמך לא קיים – יוצר אחד ראשון
+      docRef.get().then(snap=>{
+        if(!snap.exists){
+          docRef.set({
+            ...state,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+      });
 
+      unsub = docRef.onSnapshot(doc=>{
+        if(!doc.exists) return;
+        applyingRemote = true;
+        const data = doc.data();
+        state = {
+          dropoff: Array.isArray(data.dropoff) && data.dropoff.length===7 ? data.dropoff : Array(7).fill(null),
+          pickup:  Array.isArray(data.pickup)  && data.pickup.length===7  ? data.pickup  : Array(7).fill(null),
+          events:  Array.isArray(data.events)  ? data.events : []
+        };
+        events = state.events;
+        saveLocal();
+        render();
+        applyingRemote = false;
+        syncStatus.textContent = "Synced (" + householdId + ")";
+      });
+    }
+
+    function scheduleSave(){
+      saveLocal();
+      if(!db || !docRef || applyingRemote) return;
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(()=>{
+        docRef.set({
+          ...state,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge:true });
+        syncStatus.textContent = "Saving…";
+      }, 250);
+    }
+
+    // התחלה
+    renderDaySelect();
+    render();
+    initFirebase();
+
+    // PWA service worker (אם יש service-worker.js ו־manifest)
+    if("serviceWorker" in navigator){
+      window.addEventListener("load", ()=>{
+        navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+      });
+    }
   </script>
 </body>
 </html>
