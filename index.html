@@ -415,34 +415,7 @@
     const SLOTS = ["בוקר","מהלך היום","אחה״צ","ערב"];
     const LS_KEY = "weekly-planner-sync-local";
     const gcalSyncBtn = document.getElementById("gcalSync");
-    // --- Google Calendar / ICS helpers --- //
-function pad(n) {
-  return n < 10 ? "0" + n : "" + n;
-}
-
-function formatICSDate(d) {
-  // תאריך בפורמט YYYYMMDDTHHMMSS (ללא Z, יחשב כ"זמן מקומי")
-  return (
-    d.getFullYear().toString() +
-    pad(d.getMonth() + 1) +
-    pad(d.getDate()) +
-    "T" +
-    pad(d.getHours()) +
-    pad(d.getMinutes()) +
-    "00"
-  );
-}
-
-function downloadICS(filename, text) {
-  const blob = new Blob([text], { type: "text/calendar;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
+    
 
 
     // --- מצב כללי ---
@@ -827,27 +800,20 @@ function downloadICS(filename, text) {
       }, 250);
     }
 
+      <script>
+    // ... כל הפונקציות שלך כאן ...
+    // render(), initFirebase(), וכו'
+
     // התחלה
-    renderDaySelect();
     render();
     initFirebase();
-      render();
-  initFirebase();
-
-  // >>> כאן <<< להוסיף את ה-handler של Sync to Google Calendar
-
-  if("serviceWorker" in navigator){
-    ...
-  }
-</script>
-</body>
-</html>
-
 
     // PWA service worker (אם יש service-worker.js ו־manifest)
-    if("serviceWorker" in navigator){
-      window.addEventListener("load", ()=>{
-        navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker
+          .register("./service-worker.js")
+          .catch(() => {});
       });
     }
   </script>
