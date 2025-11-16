@@ -8,29 +8,28 @@
   <style>
     :root{
       /* צבעי בעלים */
-      --alon-bg: rgba(253, 224, 71, 0.16);
-      --alon-text:#854d0e;
+      --alon-bg: rgba(253, 224, 71, 0.18);
+      --alon-text:#b45309;
       --alon-border:#facc15;
 
-      --kim-bg: rgba(129, 140, 248, 0.16);
+      --kim-bg: rgba(129, 140, 248, 0.18);
       --kim-text:#3730a3;
       --kim-border:#818cf8;
 
-      --fam-bg: rgba(45, 212, 191, 0.16);
-      --fam-text:#065f46;
+      --fam-bg: rgba(45, 212, 191, 0.18);
+      --fam-text:#047857;
       --fam-border:#5eead4;
 
-      --other-bg: rgba(148, 163, 184, 0.16);
+      --other-bg: rgba(148, 163, 184, 0.18);
       --other-text:#111827;
       --other-border:#94a3b8;
 
-      --grid-border:#E5E7EB;
-      --bg-main:#EEF2FF;   /* בהיר בסגול/כחול, סטייל גוגל קלנדר */
-      --bg-main-2:#E0F2FE;
-      --bg-card:#FFFFFF;
+      --grid-border:#d1d5db;
+      --bg-main:#f3f4f6;
+      --bg-header:#eef2ff;
       --text-main:#111827;
-      --text-muted:#6B7280;
-      --accent:#2563EB;
+      --text-muted:#6b7280;
+      --accent:#2563eb;
     }
 
     *{ box-sizing:border-box; }
@@ -38,10 +37,9 @@
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-      background:
-        radial-gradient(circle at top left, var(--bg-main) 0, transparent 60%),
-        radial-gradient(circle at bottom right, var(--bg-main-2) 0, transparent 55%),
-        #F3F4F6;
+      background: radial-gradient(circle at top left, #e0f2fe 0, transparent 45%),
+                  radial-gradient(circle at top right, #e0e7ff 0, transparent 45%),
+                  var(--bg-main);
       color:var(--text-main);
     }
 
@@ -51,320 +49,417 @@
       padding:16px;
     }
 
-    h1{
-      margin:0 0 4px;
-      font-size:24px;
-      font-weight:700;
-      letter-spacing:0.04em;
-    }
-
-    .subtitle{
-      margin:0 0 12px;
-      color:var(--text-muted);
-      font-size:13px;
-    }
-
-    .topbar{
+    header{
+      background:linear-gradient(135deg,#eff6ff,#e0f2fe);
+      border-radius:18px;
+      padding:14px 16px 12px;
+      margin-bottom:12px;
+      box-shadow:0 12px 30px rgba(15,23,42,0.12);
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:8px;
-      margin-bottom:12px;
+      gap:12px;
     }
 
-    .sync-badge{
-      font-size:11px;
-      padding:4px 8px;
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,0.7);
-      color:#4b5563;
-      background:rgba(255,255,255,0.8);
-      backdrop-filter:blur(8px);
+    .title-block{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
     }
+
+    h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+    }
+
+    .subtitle{
+      margin:0;
+      color:var(--text-muted);
+      font-size:12px;
+    }
+
+    .legend{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      font-size:11px;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    .badge{ display:inline-flex; align-items:center; gap:6px; }
+    .dot{ width:11px; height:11px; border-radius:999px; display:inline-block; }
+
+    .toolbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin:10px 0 8px;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .toolbar-left{
+      font-size:11px;
+      color:var(--text-muted);
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+
+    .toolbar-right{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid #e5e7eb;
+      background:white;
+      font-size:11px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .btn.primary{
+      background:var(--accent);
+      border-color:var(--accent);
+      color:white;
+    }
+
+    .btn.ghost{
+      background:transparent;
+    }
+
+    .btn span.icon{
+      font-size:13px;
+      position:relative;
+      top:-1px;
+    }
+
+    .sync-indicator{
+      font-size:11px;
+      color:var(--text-muted);
+    }
+
+    .sync-indicator.ok{ color:#16a34a; }
+    .sync-indicator.err{ color:#dc2626; }
 
     .grid-shell{
-      background:linear-gradient(90deg, rgba(37,99,235,0.12), rgba(56,189,248,0.1));
-      padding:6px;
+      background:rgba(15,23,42,0.02);
       border-radius:18px;
+      padding:10px;
       box-shadow:0 18px 40px rgba(15,23,42,0.18);
+      position:relative;
     }
 
-    .grid-wrapper{
-      background:var(--bg-card);
-      border-radius:14px;
-      padding:8px;
+    .scroll-hint{
+      position:absolute;
+      inset-inline-end:6px;
+      top:0;
+      bottom:0;
+      width:26px;
+      pointer-events:none;
+      background:linear-gradient(to left, rgba(15,23,42,0.12), transparent);
+      border-radius:18px;
+      display:none;
+    }
+
+    .grid-wrap{
       overflow-x:auto;
-      -webkit-overflow-scrolling:touch;
+      padding-bottom:4px;
     }
 
     .grid{
-      min-width:720px;
       display:grid;
-      grid-template-columns:120px repeat(7, minmax(110px,1fr));
-      border:1px solid var(--grid-border);
-      border-radius:10px;
-      overflow:hidden;
-    }
-
-    .cell{
-      min-height:120px;
-      border-top:1px solid var(--grid-border);
-      border-left:1px solid var(--grid-border);
-      padding:6px;
-      background:#fff;
+      min-width:720px;
+      grid-template-columns:100px repeat(7, minmax(110px,1fr));
+      background:white;
+      border-radius:14px;
+      border:1px solid #e5e7eb;
     }
 
     .head{
       position:sticky;
       top:0;
-      background:#F9FAFB;
-      z-index:3;
-      border-bottom:1px solid var(--grid-border);
-      border-left:1px solid var(--grid-border);
-      text-align:center;
+      background:#f9fafb;
+      z-index:2;
+      padding:8px 6px;
+      border-bottom:1px solid #e5e7eb;
+      font-size:11px;
       font-weight:600;
-      padding:8px 4px;
-      font-size:13px;
-      color:#111827;
-    }
-
-    .head:first-child{
-      border-left:none;
+      text-align:center;
     }
 
     .rowhead{
       position:sticky;
-      left:0;
-      background:#F9FAFB;
-      z-index:2;
-      border-right:1px solid var(--grid-border);
+      right:0;
+      background:#f9fafb;
+      z-index:1;
+      border-inline-end:1px solid #e5e7eb;
+      padding:10px 8px;
+      font-size:11px;
       font-weight:600;
-      padding:8px;
-      font-size:13px;
-      color:#111827;
       display:flex;
       align-items:center;
       justify-content:space-between;
+      gap:6px;
+    }
+
+    .rowhead small{ color:var(--text-muted); font-weight:400; font-size:10px; }
+
+    .cell{
+      min-height:120px;
+      padding:6px 6px 8px;
+      border-bottom:1px solid #f3f4f6;
+      border-inline-start:1px solid var(--grid-border);
+      position:relative;
+      display:flex;
+      flex-direction:column;
       gap:4px;
     }
-
-    .slot-tag{
-      font-size:11px;
-      padding:2px 6px;
-      border-radius:999px;
-      background:#E5E7EB;
-      color:#374151;
-    }
-
-    .pill{
-      border:1px solid;
-      border-radius:10px;
-      padding:4px 6px;
-      margin-bottom:4px;
-      font-size:12px;
-      cursor:pointer;
-      transition:background 0.12s ease, transform 0.08s ease;
-    }
-
-    .pill:hover{
-      transform:translateY(-1px);
-    }
-
-    .pill .meta{
-      opacity:.8;
-      font-size:11px;
-    }
-
-    .alon{ background:var(--alon-bg); color:var(--alon-text); border-color:var(--alon-border); }
-    .kim{ background:var(--kim-bg); color:var(--kim-text); border-color:var(--kim-border); }
-    .fam{ background:var(--fam-bg); color:var(--fam-text); border-color:var(--fam-border); }
-    .other{ background:var(--other-bg); color:var(--other-text); border-color:var(--other-border); }
 
     .role{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:4px;
-      margin-bottom:4px;
-    }
-
-    .role label{
-      font-size:11px;
-      color:#4B5563;
+      gap:6px;
+      font-size:10px;
+      color:var(--text-muted);
+      padding:3px 4px;
+      background:#f9fafb;
+      border-radius:8px;
+      border:1px dashed #e5e7eb;
     }
 
     .seg{
       display:inline-flex;
-      border:1px solid #CBD5E1;
       border-radius:999px;
       overflow:hidden;
-      background:#F9FAFB;
+      border:1px solid #e5e7eb;
+      background:white;
     }
 
     .seg button{
-      padding:3px 8px;
       border:none;
       background:transparent;
+      padding:3px 7px;
+      font-size:10px;
       cursor:pointer;
-      font-size:11px;
-      color:#4B5563;
-      white-space:nowrap;
+      min-width:36px;
     }
 
-    .seg button.active.alon{ background:rgba(253,224,71,0.45); color:#854d0e; }
-    .seg button.active.kim{ background:rgba(129,140,248,0.45); color:#3730a3; }
-    .seg button.active.other{ background:rgba(148,163,184,0.4); color:#111827; }
+    .seg button.active.alon{ background:var(--alon-bg); color:var(--alon-text); }
+    .seg button.active.kim{ background:var(--kim-bg); color:var(--kim-text); }
+    .seg button.active.other{ background:var(--other-bg); color:var(--other-text); }
 
-    .events-stack{
+    .events{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
       margin-top:2px;
-      margin-bottom:4px;
     }
 
-    .add-one{
-      display:inline-flex;
+    .pill{
+      border-radius:10px;
+      padding:4px 6px;
+      font-size:11px;
+      border:1px solid;
+      display:flex;
       align-items:center;
-      justify-content:center;
+      justify-content:space-between;
+      gap:4px;
+      cursor:pointer;
+    }
+
+    .pill-main{
+      display:flex;
+      flex-direction:column;
+      gap:1px;
+    }
+
+    .pill-title{ font-weight:500; }
+    .pill-meta{ font-size:10px; opacity:0.75; }
+
+    .pill.alon{ background:var(--alon-bg); color:var(--alon-text); border-color:var(--alon-border); }
+    .pill.kim{ background:var(--kim-bg); color:var(--kim-text); border-color:var(--kim-border); }
+    .pill.fam{ background:var(--fam-bg); color:var(--fam-text); border-color:var(--fam-border); }
+    .pill.other{ background:var(--other-bg); color:var(--other-text); border-color:var(--other-border); }
+
+    .cell-add{
+      position:absolute;
+      inset-inline-end:4px;
+      bottom:4px;
+    }
+
+    .btn-add{
       width:22px;
       height:22px;
       border-radius:999px;
-      border:1px dashed #CBD5E1;
-      background:#F9FAFB;
-      color:#4B5563;
+      border:1px solid #e5e7eb;
+      background:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       font-size:16px;
       line-height:1;
       cursor:pointer;
-      padding:0;
-      transition:background 0.12s ease, transform 0.08s ease;
+      box-shadow:0 2px 4px rgba(15,23,42,0.15);
     }
 
-    .add-one:hover{
-      background:#E5F0FF;
-      transform:translateY(-1px);
-    }
+    .btn-add:hover{ background:#eff6ff; }
 
-    .footer{
-      color:#6B7280;
-      font-size:11px;
-      text-align:left;
-      margin-top:8px;
-    }
-
+    /* דיאלוג עריכה */
     dialog{
       border:none;
-      border-radius:14px;
+      border-radius:16px;
       padding:0;
       max-width:360px;
-      width:90vw;
+      width:100%;
+      box-shadow:0 18px 40px rgba(15,23,42,0.35);
     }
 
     .dlg{
-      padding:14px 16px 10px;
+      padding:14px 14px 10px;
     }
 
-    .dlg h3{
+    .dlg h2{
       margin:0 0 8px;
       font-size:16px;
     }
 
-    input,select,textarea,button{
+    .field{ margin-bottom:8px; font-size:12px; }
+    .field label{ display:block; margin-bottom:3px; color:var(--text-muted); }
+    .field input,
+    .field select,
+    .field textarea{
+      width:100%;
       font:inherit;
+      padding:6px 7px;
+      border-radius:10px;
+      border:1px solid #e5e7eb;
+      outline:none;
     }
 
-    .field{
-      display:grid;
-      gap:4px;
-      margin-bottom:8px;
-      font-size:13px;
-    }
+    .field textarea{ resize:vertical; min-height:52px; }
 
-    .row2{
+    .row{
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:8px;
+      gap:6px;
     }
 
     .btns{
       display:flex;
       justify-content:space-between;
-      gap:8px;
+      align-items:center;
       margin-top:8px;
+      gap:6px;
     }
 
-    .btn{
-      padding:7px 12px;
-      border-radius:10px;
-      border:1px solid #CBD5E1;
-      background:#F9FAFB;
-      cursor:pointer;
-      font-size:13px;
-    }
-
-    .btn.primary{
-      background:#2563EB;
-      color:white;
-      border-color:#2563EB;
-    }
+    .btn-group-right{ display:flex; gap:6px; }
 
     .btn.danger{
-      background:#FEE2E2;
-      border-color:#FECACA;
-      color:#B91C1C;
+      border-color:#fecaca;
+      background:#fef2f2;
+      color:#b91c1c;
+    }
+
+    .btn.gcal{
+      border-color:#e5e7eb;
+      background:#f9fafb;
+      font-size:10px;
+    }
+
+    .footer{
+      margin-top:6px;
+      font-size:11px;
+      color:var(--text-muted);
+      text-align:center;
     }
 
     @media (max-width:768px){
-      .wrap{ padding:10px; }
-      h1{ font-size:20px; }
-      .grid-shell{ padding:4px; }
-      .grid-wrapper{ padding:4px; }
+      header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+      .legend{ justify-content:flex-start; }
+      .grid-shell{ padding:8px; }
       .grid{ min-width:640px; }
-      .head{ font-size:12px; }
-      .rowhead{ font-size:12px; }
-      .cell{ min-height:100px; }
+      .scroll-hint{ display:block; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>WEEKLY PLANNER FOR COUPLES</h1>
-    <p class="subtitle">have a good week</p>
+    <header>
+      <div class="title-block">
+        <h1>WEEKLY PLANNER FOR COUPLES</h1>
+        <p class="subtitle">have a good week · חלוקה שבועית של בוקר / יום / אחר הצהריים / ערב.</p>
+      </div>
+      <div class="legend">
+        <span class="badge"><span class="dot" style="background:var(--alon-bg)"></span>אלון</span>
+        <span class="badge"><span class="dot" style="background:var(--kim-bg)"></span>קים</span>
+        <span class="badge"><span class="dot" style="background:var(--fam-bg)"></span>משפחה</span>
+        <span class="badge"><span class="dot" style="background:var(--other-bg)"></span>אחר / סבתא</span>
+      </div>
+    </header>
 
-    <div class="topbar">
-      <span style="font-size:12px; color:#4B5563;">
-        בוקר / יום / אחה״צ / ערב · Drop-off & Pick-up לתיאו
-      </span>
-      <span id="syncStatus" class="sync-badge">Local only</span>
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <span id="syncStatus" class="sync-indicator">Local only</span>
+      </div>
+      <div class="toolbar-right">
+        <button id="btnExportIcs" class="btn ghost" type="button">
+          <span class="icon">📆</span>
+          Export week to Google Calendar (.ics)
+        </button>
+        <button id="btnReset" class="btn" type="button">
+          <span class="icon">↺</span>
+          Reset week
+        </button>
+      </div>
     </div>
 
     <div class="grid-shell">
-      <div class="grid-wrapper">
+      <div class="scroll-hint"></div>
+      <div class="grid-wrap">
         <div id="grid" class="grid"></div>
       </div>
     </div>
 
     <p class="footer">
-      בוקר (א׳–ה׳): מי לוקח לגן · אחה״צ (א׳–ה׳): מי אוסף. לכל משבצת אפשר להוסיף כמה פריטים, עם בחירה למי זה שייך בחלון העריכה.
+      בבוקר: מי לוקח לגן (א׳–ה׳). אחה"צ: מי אוסף (א׳–ה׳). בכל משבצת אפשר להוסיף כמה משימות שרוצים, אבל רק פלוס אחד לפתיחה.
     </p>
   </div>
 
   <dialog id="dlg">
     <form method="dialog" class="dlg">
-      <h3>עריכת פריט</h3>
+      <h2>עריכת פריט</h2>
+
       <div class="field">
         <label>כותרת</label>
-        <input id="title" />
+        <input id="fTitle" />
       </div>
 
-      <div class="row2">
+      <div class="row">
         <div class="field">
           <label>יום</label>
-          <select id="day"></select>
+          <select id="fDay"></select>
         </div>
         <div class="field">
           <label>חלק ביום</label>
-          <select id="slot">
+          <select id="fSlot">
             <option value="0">בוקר</option>
-            <option value="1">מהלך היום</option>
-            <option value="2">אחה״צ</option>
+            <option value="1">יום</option>
+            <option value="2">אחה"צ</option>
             <option value="3">ערב</option>
           </select>
         </div>
@@ -372,7 +467,7 @@
 
       <div class="field">
         <label>שייך ל</label>
-        <select id="person">
+        <select id="fPerson">
           <option>אלון</option>
           <option>קים</option>
           <option>משפחה</option>
@@ -381,141 +476,135 @@
       </div>
 
       <div class="field">
-        <label>הערות</label>
-        <textarea id="notes" rows="3"></textarea>
+        <label>הערות (לא חובה)</label>
+        <textarea id="fNotes"></textarea>
       </div>
 
-      <div class="toolbar">
-  <div class="legend">
-    ...
-  </div>
-  <button id="resetWeek" class="btn danger">איפוס שבוע</button>
-  <button id="gcalSync" class="btn">Google Calendar</button>
-  <button id="export" class="btn">ייצוא JSON</button>
-  <input id="importFile" type="file" accept="application/json" class="btn" title="ייבוא JSON" />
-</div>
- 
       <div class="btns">
-        <button class="btn danger" id="deleteBtn" type="button">מחיקה</button>
-        <div style="flex:1"></div>
-        <button class="btn" value="cancel">ביטול</button>
-        <button class="btn primary" id="saveBtn" type="button">שמירה</button>
+        <button id="btnDelete" class="btn danger" type="button">Delete</button>
+        <div class="btn-group-right">
+          <button id="btnGcal" class="btn gcal" type="button">
+            <span class="icon">➜</span> Add this to Google Calendar
+          </button>
+          <button class="btn" value="cancel">Cancel</button>
+          <button id="btnSave" class="btn primary" type="button">Save</button>
+        </div>
       </div>
     </form>
   </dialog>
 
-  <!-- Firebase compat SDKs + קונפיג חיצוני -->
+  <!-- Firebase SDKs (Compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+  <!-- config.js צריך להכיל window.FIREBASE_CFG + window.HOUSEHOLD_ID -->
   <script src="config.js"></script>
 
   <script>
     const DAYS = ["ראשון","שני","שלישי","רביעי","חמישי","שישי","שבת"];
-    const SLOTS = ["בוקר","מהלך היום","אחה״צ","ערב"];
-    const LS_KEY = "weekly-planner-sync-local";
-    const gcalSyncBtn = document.getElementById("gcalSync");
-    
+    const SLOTS = ["בוקר","יום","אחה\"צ","ערב"];
+    const LS_KEY = "weekly-planner-state-v2";
 
+    let state = loadLocal() || {
+      dropoff: Array(7).fill(null),
+      pickup:  Array(7).fill(null),
+      events:  []
+    };
+    let events = state.events;
 
-    // --- מצב כללי ---
-    let state = null;
-    let events = [];
+    // Firebase
     let db = null;
     let docRef = null;
     let unsub = null;
-    let applyingRemote = false;
     let saveTimer = null;
+    let applyingRemote = false;
     let householdId = window.HOUSEHOLD_ID || "alon-kim";
 
-    // --- DOM ---
-    const grid = document.getElementById("grid");
-    const dlg = document.getElementById("dlg");
-    const titleEl = document.getElementById("title");
-    const dayEl = document.getElementById("day");
-    const slotEl = document.getElementById("slot");
-    const personEl = document.getElementById("person");
-    const notesEl = document.getElementById("notes");
-    const saveBtn = document.getElementById("saveBtn");
-    const deleteBtn = document.getElementById("deleteBtn");
-    const syncStatus = document.getElementById("syncStatus");
+    const gridEl       = document.getElementById("grid");
+    const syncStatusEl = document.getElementById("syncStatus");
+    const btnReset     = document.getElementById("btnReset");
+    const btnExportIcs = document.getElementById("btnExportIcs");
 
-    // --- עזרות מצב ---
+    const dlg      = document.getElementById("dlg");
+    const fTitle   = document.getElementById("fTitle");
+    const fDay     = document.getElementById("fDay");
+    const fSlot    = document.getElementById("fSlot");
+    const fPerson  = document.getElementById("fPerson");
+    const fNotes   = document.getElementById("fNotes");
+    const btnSave  = document.getElementById("btnSave");
+    const btnDel   = document.getElementById("btnDelete");
+    const btnGcal  = document.getElementById("btnGcal");
+
+    let editingId = null;
+
+    function id(){ return Math.random().toString(36).slice(2,9); }
+
+    function saveLocal(){ localStorage.setItem(LS_KEY, JSON.stringify({ ...state, events })); }
+
     function loadLocal(){
-      try{
-        return JSON.parse(localStorage.getItem(LS_KEY));
-      }catch(e){
-        return null;
-      }
-    }
-
-    function saveLocal(){
-      localStorage.setItem(LS_KEY, JSON.stringify({ ...state, events }));
-    }
-
-    function initState(){
-      const saved = loadLocal();
-      if(saved){
-        state = {
-          dropoff: Array.isArray(saved.dropoff) && saved.dropoff.length===7 ? saved.dropoff : Array(7).fill(null),
-          pickup:  Array.isArray(saved.pickup)  && saved.pickup.length===7  ? saved.pickup  : Array(7).fill(null),
-          events:  Array.isArray(saved.events)  ? saved.events : []
-        };
-      }else{
-        state = {
-          dropoff:Array(7).fill(null),
-          pickup:Array(7).fill(null),
-          events:[]
-        };
-      }
-      events = state.events;
-    }
-
-    initState();
-
-    function id(){
-      return Math.random().toString(36).slice(2,9);
+      try{ return JSON.parse(localStorage.getItem(LS_KEY)); }
+      catch(e){ return null; }
     }
 
     function pillClass(person){
-      if(person==="אלון") return "alon";
-      if(person==="קים") return "kim";
-      if(person==="משפחה") return "fam";
+      if(person === "אלון") return "alon";
+      if(person === "קים") return "kim";
+      if(person === "משפחה") return "fam";
       return "other";
     }
 
-    // מנקה אירועי dropoff/pickup מסופ"ש
+    function makeDayOptions(){
+      fDay.innerHTML = DAYS.map((d,i)=>`<option value="${i}">${d}</option>`).join("");
+    }
+    makeDayOptions();
+
     function cleanupWeekendSpecials(){
-      events = events.filter(e=>{
+      events = events.filter(e => {
         const isWeekend = e.day >= 5;
-        const isSpecial = (e.slot===0 || e.slot===2) &&
-          (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"));
+        const isSpecial = (e.slot === 0 || e.slot === 2) && (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"));
         return !(isWeekend && isSpecial);
       });
-      state.dropoff[5] = null;
-      state.dropoff[6] = null;
-      state.pickup[5] = null;
-      state.pickup[6] = null;
+      state.dropoff[5] = state.dropoff[6] = null;
+      state.pickup[5]  = state.pickup[6]  = null;
       state.events = events;
     }
 
-    // --- UI ---
-    function cellHead(text){
+    function render(){
+      cleanupWeekendSpecials();
+
+      gridEl.innerHTML = "";
+      gridEl.append(makeHeadCell(""));
+      for(let d=0; d<7; d++){
+        gridEl.append(makeHeadCell(DAYS[d]));
+      }
+
+      for(let s=0; s<4; s++){
+        gridEl.append(makeRowHead(s));
+        for(let d=0; d<7; d++){
+          const items = events.filter(e => e.day === d && e.slot === s);
+          gridEl.append(makeCell(d, s, items));
+        }
+      }
+    }
+
+    function makeHeadCell(text){
       const div = document.createElement("div");
       div.className = "head";
       div.textContent = text;
       return div;
     }
 
-    function rowHead(text){
+    function makeRowHead(slot){
       const div = document.createElement("div");
       div.className = "rowhead";
-      const span = document.createElement("span");
-      span.textContent = text;
-      const tag = document.createElement("span");
-      tag.className = "slot-tag";
-      tag.textContent = "•";
-      div.append(span, tag);
+      const label = document.createElement("span");
+      label.textContent = SLOTS[slot];
+      const sm = document.createElement("small");
+      if(slot === 0) sm.textContent = "07:00";
+      else if(slot === 1) sm.textContent = "10:00";
+      else if(slot === 2) sm.textContent = "16:00";
+      else sm.textContent = "20:00";
+      div.append(label, sm);
       return div;
     }
 
@@ -523,245 +612,364 @@
       const seg = document.createElement("div");
       seg.className = "seg";
       const options = ["אלון","קים","סבתא"];
-      const btns = options.map(name=>{
+      const btns = options.map(name => {
         const b = document.createElement("button");
         b.type = "button";
         b.textContent = name;
-        seg.appendChild(b);
+        seg.append(b);
         return b;
       });
-
       function paint(val){
         btns.forEach((b,i)=>{
           const who = options[i];
-          if(val === who){
-            b.className = "active " + (who==="אלון"?"alon":who==="קים"?"kim":"other");
-          }else{
-            b.className = "";
-          }
+          b.className = (val === who)
+            ? `active ${who === "אלון" ? "alon" : (who === "קים" ? "kim" : "other")}`
+            : "";
         });
       }
-
       btns.forEach((b,i)=>{
-        b.onclick = ()=>{
+        b.addEventListener("click", ()=>{
           const who = options[i];
-          const next = (current===who) ? null : who;
+          const next = (current === who) ? null : who;
           current = next;
           paint(current);
           onChange(current);
-        };
+        });
       });
-
       paint(current);
       return seg;
     }
 
     function upsertSpecialEvent(day, slot, label, who){
-      // מוחק אירוע מיוחד קודם באותו תא
-      events = events.filter(e=>!(
-        e.day===day &&
-        e.slot===slot &&
-        (e.title.startsWith("לוקח") || e.title.startsWith("אוסף"))
-      ));
-
+      events = events.filter(e => !(e.day === day && e.slot === slot && (e.title.startsWith("לוקח") || e.title.startsWith("אוסף")) ));
       if(who){
-        const person = (who==="סבתא") ? "אחר" : who;
-        events.push({
-          id:id(),
-          day,
-          slot,
-          title:label,
-          person,
-          notes:""
-        });
+        const person = (who === "סבתא") ? "אחר" : who;
+        events.push({ id:id(), day, slot, title:label, person, notes:"" });
       }
-
       state.events = events;
       scheduleSave();
     }
 
-    function pillNode(item){
-      const p = document.createElement("div");
-      p.className = "pill " + pillClass(item.person);
-      p.innerHTML =
-        '<div><strong>' + item.title + '</strong> ' +
-        '<span class="meta">• ' + item.person + '</span></div>' +
-        (item.notes ? '<div class="meta">' + item.notes + '</div>' : '');
-      p.addEventListener("click", ()=> openEditor(item));
-      return p;
-    }
+    function makeCell(day, slot, items){
+      const cell = document.createElement("div");
+      cell.className = "cell";
 
-    function addBtn(day, slot){
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "add-one";
-      btn.textContent = "+";
-      btn.addEventListener("click", ()=>{
-        openEditor({
-          id:null,
-          day,
-          slot,
-          title:"",
-          person:"אלון",
-          notes:""
-        });
-      });
-      return btn;
-    }
-
-    function cell(day, slot, items){
-      const div = document.createElement("div");
-      div.className = "cell";
-
-      // פס בחירה מי לוקח / אוסף (בוקר / אחה"צ, א׳–ה׳ בלבד)
-      if((slot===0 || slot===2) && day < 5){
+      if((slot === 0 || slot === 2) && day < 5){
         const role = document.createElement("div");
         role.className = "role";
-
-        const label = document.createElement("label");
-        label.textContent = (slot===0 ? "לוקח/ת לגן:" : "אוסף/ת:");
-
-        const cur = (slot===0 ? state.dropoff[day] : state.pickup[day]);
-        const seg = makeExclusiveSeg(cur, val=>{
-          if(slot===0){
+        const label = document.createElement("span");
+        label.textContent = slot === 0 ? "לוקח/ת לגן" : "אוסף/ת";
+        const current = slot === 0 ? state.dropoff[day] : state.pickup[day];
+        const seg = makeExclusiveSeg(current, (val)=>{
+          if(slot === 0){
             state.dropoff[day] = val;
             upsertSpecialEvent(day, 0, "לוקח/ת לגן", val);
-          }else{
+          } else {
             state.pickup[day] = val;
             upsertSpecialEvent(day, 2, "אוסף/ת", val);
           }
           render();
         });
-
         role.append(label, seg);
-        div.appendChild(role);
+        cell.append(role);
       }
 
-      const stack = document.createElement("div");
-      stack.className = "events-stack";
-      items.forEach(item=>{
-        stack.appendChild(pillNode(item));
+      const evWrap = document.createElement("div");
+      evWrap.className = "events";
+
+      items.forEach(item => {
+        evWrap.append(makePill(item));
       });
-      div.appendChild(stack);
 
-      div.appendChild(addBtn(day, slot));
+      cell.append(evWrap);
 
-      return div;
+      const addWrap = document.createElement("div");
+      addWrap.className = "cell-add";
+      const addBtn = document.createElement("button");
+      addBtn.type = "button";
+      addBtn.className = "btn-add";
+      addBtn.textContent = "+";
+      addBtn.addEventListener("click", ()=>{
+        openEditor({ id:null, day, slot, title:"", person:"אלון", notes:"" });
+      });
+      addWrap.append(addBtn);
+      cell.append(addWrap);
+
+      return cell;
     }
 
-    function renderDaySelect(){
-      dayEl.innerHTML = DAYS.map((d,i)=>`<option value="${i}">${d}</option>`).join("");
-    }
+    function makePill(item){
+      const pill = document.createElement("div");
+      pill.className = `pill ${pillClass(item.person)}`;
 
-    function render(){
-      cleanupWeekendSpecials();
-      grid.innerHTML = "";
+      const main = document.createElement("div");
+      main.className = "pill-main";
 
-      // שורת כותרת ימים
-      grid.appendChild(cellHead(""));
-      for(let d=0; d<7; d++){
-        grid.appendChild(cellHead(DAYS[d]));
+      const t = document.createElement("div");
+      t.className = "pill-title";
+      t.textContent = item.title;
+
+      const m = document.createElement("div");
+      m.className = "pill-meta";
+      m.textContent = `${item.person} • ${SLOTS[item.slot]} • ${DAYS[item.day]}`;
+
+      main.append(t);
+      if(item.notes){
+        const notes = document.createElement("div");
+        notes.className = "pill-meta";
+        notes.textContent = item.notes;
+        main.append(notes);
       }
+      main.append(m);
 
-      // שורות לפי חלקי היום
-      for(let s=0; s<4; s++){
-        grid.appendChild(rowHead(SLOTS[s]));
-        for(let d=0; d<7; d++){
-          const items = events.filter(e=>e.day===d && e.slot===s);
-          grid.appendChild(cell(d, s, items));
-        }
-      }
+      pill.append(main);
+      pill.addEventListener("click", ()=> openEditor(item));
+      return pill;
     }
-
-    // --- דיאלוג עריכה ---
-    let editingId = null;
 
     function openEditor(item){
       editingId = item.id;
-      titleEl.value = item.title || "";
-      dayEl.value = item.day;
-      slotEl.value = item.slot;
-      personEl.value = item.person || "אלון";
-      notesEl.value = item.notes || "";
-      deleteBtn.style.display = editingId ? "inline-block" : "none";
+      fTitle.value  = item.title || "";
+      fDay.value    = item.day;
+      fSlot.value   = item.slot;
+      fPerson.value = item.person || "אלון";
+      fNotes.value  = item.notes || "";
+
+      btnDel.style.display = editingId ? "inline-flex" : "none";
       dlg.showModal();
     }
 
-    saveBtn.addEventListener("click", ()=>{
+    btnSave.addEventListener("click", ()=>{
       const obj = {
         id: editingId || id(),
-        title: titleEl.value.trim(),
-        day: Number(dayEl.value),
-        slot: Number(slotEl.value),
-        person: personEl.value,
-        notes: notesEl.value.trim()
+        title: (fTitle.value || "").trim(),
+        day: Number(fDay.value),
+        slot: Number(fSlot.value),
+        person: fPerson.value,
+        notes: (fNotes.value || "").trim()
       };
-      if(!obj.title){
-        dlg.close();
+      if(!obj.title){ dlg.close(); return; }
+      const idx = events.findIndex(e => e.id === obj.id);
+      if(idx >= 0) events[idx] = obj; else events.push(obj);
+      state.events = events;
+      scheduleSave();
+      render();
+      dlg.close();
+    });
+
+    btnDel.addEventListener("click", ()=>{
+      if(!editingId){ return; }
+      events = events.filter(e => e.id !== editingId);
+      state.events = events;
+      scheduleSave();
+      render();
+      dlg.close();
+    });
+
+    // Reset all
+    btnReset.addEventListener("click", ()=>{
+      if(!confirm("לאפס את השבוע?")) return;
+      state.dropoff = Array(7).fill(null);
+      state.pickup  = Array(7).fill(null);
+      events = [];
+      state.events = events;
+      scheduleSave();
+      render();
+    });
+
+    // --- Google Calendar sync (ICS export) ---
+    function getWeekStart(){
+      const now = new Date();
+      const day = now.getDay(); // 0=Sunday
+      const start = new Date(now);
+      start.setHours(0,0,0,0);
+      start.setDate(now.getDate() - day); // beginning of this week (Sunday)
+      return start;
+    }
+
+    function formatICSDate(dt){
+      const pad = n => String(n).padStart(2,"0");
+      return (
+        dt.getFullYear().toString() +
+        pad(dt.getMonth()+1) +
+        pad(dt.getDate()) +
+        "T" +
+        pad(dt.getHours()) +
+        pad(dt.getMinutes()) +
+        pad(dt.getSeconds())
+      );
+    }
+
+    function buildICSEvents(){
+      const lines = [];
+      const weekStart = getWeekStart();
+
+      const slotTime = slot => {
+        const d = new Date(weekStart);
+        return d;
+      };
+
+      function makeDateFor(day, slot){
+        const d = new Date(weekStart);
+        d.setDate(d.getDate() + day);
+        if(slot === 0) d.setHours(7,0,0,0);
+        else if(slot === 1) d.setHours(10,0,0,0);
+        else if(slot === 2) d.setHours(16,0,0,0);
+        else d.setHours(20,0,0,0);
+        return d;
+      }
+
+      // Create events from explicit items
+      events.forEach(ev => {
+        const dtStart = makeDateFor(ev.day, ev.slot);
+        const dtEnd   = new Date(dtStart.getTime() + 60*60*1000); // שעה ברירת מחדל
+        const uid = `wp-${ev.id}@alon-kim`;
+        lines.push("BEGIN:VEVENT");
+        lines.push("UID:"+uid);
+        lines.push("SUMMARY:"+ev.title.replace(/,/g, "\\,"));
+        lines.push("DESCRIPTION:"+(ev.notes || "Weekly Planner for Couples"));
+        lines.push("DTSTART:"+formatICSDate(dtStart));
+        lines.push("DTEND:"+formatICSDate(dtEnd));
+        lines.push("END:VEVENT");
+      });
+
+      // Dropoff / Pickup shortcuts (if not already represented explicitly)
+      state.dropoff.forEach((who, day)=>{
+        if(!who || day > 4) return;
+        const title = `Drop-off Theo (${who})`;
+        const dtStart = makeDateFor(day, 0);
+        const dtEnd   = new Date(dtStart.getTime() + 45*60*1000);
+        const uid = `wp-drop-${day}@alon-kim`;
+        lines.push("BEGIN:VEVENT");
+        lines.push("UID:"+uid);
+        lines.push("SUMMARY:"+title.replace(/,/g, "\\,"));
+        lines.push("DESCRIPTION:Auto from Weekly Planner for Couples");
+        lines.push("DTSTART:"+formatICSDate(dtStart));
+        lines.push("DTEND:"+formatICSDate(dtEnd));
+        lines.push("END:VEVENT");
+      });
+
+      state.pickup.forEach((who, day)=>{
+        if(!who || day > 4) return;
+        const title = `Pick-up Theo (${who})`;
+        const dtStart = makeDateFor(day, 2);
+        const dtEnd   = new Date(dtStart.getTime() + 45*60*1000);
+        const uid = `wp-pick-${day}@alon-kim`;
+        lines.push("BEGIN:VEVENT");
+        lines.push("UID:"+uid);
+        lines.push("SUMMARY:"+title.replace(/,/g, "\\,"));
+        lines.push("DESCRIPTION:Auto from Weekly Planner for Couples");
+        lines.push("DTSTART:"+formatICSDate(dtStart));
+        lines.push("DTEND:"+formatICSDate(dtEnd));
+        lines.push("END:VEVENT");
+      });
+
+      return lines;
+    }
+
+    function exportWeekToICS(){
+      const lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Alon&Kim//Weekly Planner//EN"
+      ];
+      lines.push(...buildICSEvents());
+      lines.push("END:VCALENDAR");
+      const blob = new Blob([lines.join("\r\n")], { type:"text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "weekly-planner.ics";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    btnExportIcs.addEventListener("click", exportWeekToICS);
+
+    // Add current item to Google Calendar via link
+    btnGcal.addEventListener("click", ()=>{
+      if(!editingId){
+        alert("שמור את הפריט ואז תוכל לייצר אירוע ביומן.");
         return;
       }
-      const idx = events.findIndex(e=>e.id===obj.id);
-      if(idx>=0){
-        events[idx] = obj;
-      }else{
-        events.push(obj);
+      const ev = events.find(e => e.id === editingId);
+      if(!ev){
+        alert("לא נמצא פריט.");
+        return;
       }
-      state.events = events;
-      scheduleSave();
-      render();
-      dlg.close();
+      const dtStart = (function(){
+        const weekStart = getWeekStart();
+        const d = new Date(weekStart);
+        d.setDate(d.getDate() + ev.day);
+        if(ev.slot === 0) d.setHours(7,0,0,0);
+        else if(ev.slot === 1) d.setHours(10,0,0,0);
+        else if(ev.slot === 2) d.setHours(16,0,0,0);
+        else d.setHours(20,0,0,0);
+        return d;
+      })();
+      const dtEnd = new Date(dtStart.getTime() + 60*60*1000);
+      const fmt = d => {
+        const pad = n => String(n).padStart(2,"0");
+        return (
+          d.getFullYear().toString() +
+          pad(d.getMonth()+1) +
+          pad(d.getDate()) +
+          "T" +
+          pad(d.getHours()) +
+          pad(d.getMinutes()) +
+          "00"
+        );
+      };
+      const base = "https://calendar.google.com/calendar/render?action=TEMPLATE";
+      const params = new URLSearchParams({
+        text: ev.title,
+        details: ev.notes || "From Weekly Planner for Couples",
+        dates: fmt(dtStart) + "/" + fmt(dtEnd)
+      });
+      const url = base + "&" + params.toString();
+      window.open(url, "_blank");
     });
 
-    deleteBtn.addEventListener("click", ()=>{
-      if(!editingId) return;
-      events = events.filter(e=>e.id !== editingId);
-      state.events = events;
-      scheduleSave();
-      render();
-      dlg.close();
-    });
+    // --- Firebase (unchanged, using FIREBASE_CFG & HOUSEHOLD_ID) ---
 
-    // --- Firebase – שימוש ב-FIREBASE_CFG ו-HOUSEHOLD_ID מקובץ config.js ---
     function initFirebase(){
       try{
         const cfg = window.FIREBASE_CFG;
         if(!cfg || !cfg.apiKey){
-          syncStatus.textContent = "Local only (no Firebase)";
+          syncStatusEl.textContent = "Local only";
           render();
           return;
         }
         const app = firebase.initializeApp(cfg);
         const auth = firebase.auth();
         db = firebase.firestore();
-        syncStatus.textContent = "Connecting…";
+        syncStatusEl.textContent = "Connecting…";
         auth.signInAnonymously()
           .then(()=>{
-            syncStatus.textContent = "Connected";
+            syncStatusEl.textContent = "Connected";
             initRealtime();
           })
-          .catch(err=>{
+          .catch(err => {
             console.error(err);
-            syncStatus.textContent = "Firebase error";
+            syncStatusEl.textContent = "Firebase error";
+            syncStatusEl.classList.add("err");
             render();
           });
       } catch(err){
         console.error(err);
-        syncStatus.textContent = "Config error";
+        syncStatusEl.textContent = "Config error";
+        syncStatusEl.classList.add("err");
         render();
       }
     }
 
     function initRealtime(){
-      if(!db){
-        render();
-        return;
-      }
+      if(!db){ render(); return; }
       if(unsub) unsub();
-
       docRef = db.collection("plans").doc(householdId);
-
-      // אם המסמך לא קיים – יוצר אחד ראשון
-      docRef.get().then(snap=>{
+      docRef.get().then(snap => {
         if(!snap.exists){
           docRef.set({
             ...state,
@@ -769,21 +977,21 @@
           });
         }
       });
-
-      unsub = docRef.onSnapshot(doc=>{
+      unsub = docRef.onSnapshot(doc => {
         if(!doc.exists) return;
         applyingRemote = true;
         const data = doc.data();
         state = {
-          dropoff: Array.isArray(data.dropoff) && data.dropoff.length===7 ? data.dropoff : Array(7).fill(null),
-          pickup:  Array.isArray(data.pickup)  && data.pickup.length===7  ? data.pickup  : Array(7).fill(null),
-          events:  Array.isArray(data.events)  ? data.events : []
+          dropoff: data.dropoff || Array(7).fill(null),
+          pickup:  data.pickup  || Array(7).fill(null),
+          events:  data.events  || []
         };
         events = state.events;
         saveLocal();
         render();
         applyingRemote = false;
-        syncStatus.textContent = "Synced (" + householdId + ")";
+        syncStatusEl.textContent = "Synced (" + householdId + ")";
+        syncStatusEl.classList.add("ok");
       });
     }
 
@@ -796,26 +1004,13 @@
           ...state,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         }, { merge:true });
-        syncStatus.textContent = "Saving…";
+        syncStatusEl.textContent = "Saving…";
       }, 250);
     }
 
-      <script>
-    // ... כל הפונקציות שלך כאן ...
-    // render(), initFirebase(), וכו'
-
-    // התחלה
+    // Start
     render();
     initFirebase();
-
-    // PWA service worker (אם יש service-worker.js ו־manifest)
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("./service-worker.js")
-          .catch(() => {});
-      });
-    }
   </script>
 </body>
 </html>
